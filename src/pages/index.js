@@ -11,7 +11,6 @@ import HouseScreen from './house';
 // 引进tabbar
 import TabbarNavigate from './tabbar';
 
-
 // 根据tabbar 的激活状态，动态改变导航标题
 function getHeaderTitle(route) {
     const routeName = getFocusedRouteNameFromRoute(route) ?? '首页';
@@ -25,17 +24,29 @@ function getHeaderTitle(route) {
     }
 }
 
-
-
 // 创建 stack navigator
 const Stack = createStackNavigator();
 
 const StackComponent = function () {
     return (
-        <Stack.Navigator>
-            <Stack.Screen name="首页" component={TabbarNavigate} 
+        <Stack.Navigator
+            screenOptions={{
+                headerStyle: {
+                    backgroundColor: '#f04531',
+                },
+                headerTintColor: '#fff',
+                headerTitleStyle: {
+                    fontWeight: 'bold',
+                    flexDirection: 'row',
+                    alignSelf: 'center',
+                },
+            }}
+        >
+            <Stack.Screen
+                name="首页"
+                component={TabbarNavigate}
                 options={({route}) => ({
-                    headerTitle: getHeaderTitle(route)
+                    headerTitle: getHeaderTitle(route),
                 })}
             />
             <Stack.Screen name="新房" component={HouseScreen} />

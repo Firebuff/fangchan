@@ -7,6 +7,8 @@ import React from 'react'
 import {AppRegistry} from 'react-native';
 
 import App from './src/app';
+// import App from './test';
+
 
 //import App from './containers/redux-example';
 
