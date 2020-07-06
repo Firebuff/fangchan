@@ -7,6 +7,8 @@ import {
     Dimensions,
     ScrollView,
     Button,
+    Animated,
+    Easing,
 } from 'react-native';
 
 import pt from '../utils/px2dp/Px2dp';
@@ -75,16 +77,40 @@ let naviList = [
 
 const deviceWidth = Dimensions.get('window').width;
 
+const contentNavList = [
+    {
+        name: '新房',
+    },
+    {
+        name: '二手房',
+    },
+    {
+        name: '出租房',
+    },
+];
+
 class Main extends Component {
     constructor(props) {
         super(props);
         this.state = {
             entries: [
                 {title: '热销新盘汇龙湾·天樾购房即可享9.5折优惠'},
-                {title: '中俄边境两头熊“开战”，观测相机被摧毁，专家：友谊的象征'},
-                {title: '阿里巴巴（中国）有限公司被列为被执行人 执行标的超50万'},
+                {
+                    title:
+                        '中俄边境两头熊“开战”，观测相机被摧毁，专家：友谊的象征',
+                },
+                {
+                    title:
+                        '阿里巴巴（中国）有限公司被列为被执行人 执行标的超50万',
+                },
             ],
+            range: [0, 0],
+            currentIndex: 0
         };
+        this.animateVal = new Animated.Value(0);
+
+        this.spin = null
+
     }
 
     _renderItem({item, index}) {
@@ -92,19 +118,71 @@ class Main extends Component {
             <Text
                 ellipsizeMode={'tail'}
                 numberOfLines={1}
-                style={[Styles.liveNewsText]}
-            >
-                { item.title }
+                style={[Styles.liveNewsText]}>
+                {item.title}
             </Text>
-        )
+        );
     }
 
-    componentDidMount() {}
+    cardSelect(item, index) {
+        
+        let normal = pt((375-30)/3)
+        let end, begin;
+
+        if (index > this.state.currentIndex) {
+            end  = (index) * normal
+            begin  = (index-1) * normal
+        } else {
+            end  = (index) * normal
+            begin  = (index+1) * normal
+        }
+
+       
+        
+
+        if (this.state.range ==  [begin, end]) {
+            return
+        }
+
+        this.setState({
+            range: [begin, end],
+            currentIndex: index
+        })
+
+
+        this.moveLine();
+
+        
+
+    }
+
+    //旋转方法
+    moveLine = () => {
+        this.animateVal.setValue(0);
+        Animated.timing(this.animateVal, {
+            toValue: 1, // 最终值 为1，这里表示最大旋转 360度
+            duration: 500,
+            easing: Easing.linear,
+        }).start();
+    };
+
+    mirror = (arr) => {
+        
+        this.spin = this.animateVal.interpolate({
+            inputRange: [0, 1], //输入值
+            outputRange: arr, //输出值
+        });
+        console.log(this.spin);
+    };
+
     render() {
-        const horizontalMargin = 20;
-        const slideWidth = 280;
-        const itemWidth = slideWidth + horizontalMargin * 2;
-        const itemHeight = 200;
+        
+        const spin = this.animateVal.interpolate({
+            inputRange: [0, 1], //输入值
+            outputRange: this.state.range, //输出值
+        });
+
+        // this.mirror(this.range)
 
         return (
             <ScrollView style={Styles.container}>
@@ -147,20 +225,46 @@ class Main extends Component {
                                         }}
                                         data={this.state.entries}
                                         renderItem={this._renderItem}
-                                        sliderHeight={ pt(44) }
-                                        itemHeight={ pt(44) }
-                                        vertical={ true }
+                                        sliderHeight={pt(44)}
+                                        itemHeight={pt(44)}
+                                        vertical={true}
                                         activeSlideOffset={0}
-                                        autoplay={ true }
+                                        autoplay={true}
                                         loop={true}
                                         autoplayDelay={1000}
                                         autoplayInterval={3000}
-                                        scrollEnabled = { false }
+                                        scrollEnabled={false}
                                     />
-                                    
                                 </View>
                             </View>
                         </Card>
+                    </View>
+                    <View style={Styles.houseList}>
+                        <View style={Styles.houseListTitle}>
+                          
+
+                            <Animated.View
+                                // style={[{transform: [{translateX: spin}]}]}>
+                                style={{ left: spin }}>
+                              
+                                <View style={ [Styles.activeLine] }></View>
+                            </Animated.View>
+
+                            {contentNavList.map((item, index) => {
+                                return (
+                                    <View style={Styles.textWrapper}>
+                                        <Text
+                                            style={Styles.houseListTitleText}
+                                            onPress={() => {
+                                                this.cardSelect(item, index);
+                                            }}
+                                            key={index}>
+                                            {item.name}
+                                        </Text>
+                                    </View>
+                                );
+                            })}
+                        </View>
                     </View>
                 </View>
             </ScrollView>
@@ -234,6 +338,36 @@ const Styles = StyleSheet.create({
         alignSelf: 'center',
         display: 'flex',
         marginLeft: -12,
+    },
+    houseList: {
+        width: pt(375 - 30),
+        alignSelf: 'center',
+        backgroundColor: 'pink',
+        marginTop: pt(12),
+    },
+    houseListTitle: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        position: 'relative',
+    },
+    houseListTitleText: {
+        fontSize: pt(14),
+        fontWeight: 'bold',
+        color: '#788397',
+        color: '#000018',
+        lineHeight: pt(44),
+        alignSelf: 'center',
+    },
+    activeLine: {
+        width: pt(18),
+        height: pt(4),
+        backgroundColor: 'red',
+        position: 'absolute',
+        left: pt((375 - 30) / 3 / 2 - 9),
+        bottom: pt(4),
+    },
+    textWrapper: {
+        flex: 1,
     },
 });
 
