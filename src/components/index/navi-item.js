@@ -1,5 +1,5 @@
 import React from 'react';
-import {View, Text, StyleSheet} from 'react-native';
+import {View, Text, StyleSheet } from 'react-native';
 
 import pt from '../../utils/px2dp/Px2dp';
 
@@ -11,7 +11,7 @@ const NaviItem = function (props) {
         <View style={[Styles.naviContainer,{ width: width }]}>
             <View>
                 <View style={ [Styles.svg, {backgroundColor: bg}] }>
-                    <Svg width={ pt(40) } height={ pt(40) } name={ icon }></Svg>
+                    <Svg width={ pt(18) } height={ pt(18) } name={ icon }></Svg>
                 </View>
                 <Text style={ Styles.naviText }>{ name }</Text>
             </View>
@@ -23,21 +23,21 @@ const Styles = StyleSheet.create({
     naviContainer: {
         flexDirection: 'row',
         justifyContent: 'center',
-        paddingTop: pt(30)
+        paddingBottom: pt(15)
     },
     svg: {
-        height: pt(88),
-        width: pt(88),
-        borderRadius: 15,
+        height: pt(44),
+        width: pt(44),
+        borderRadius: 18,
         flexDirection: 'row',
         justifyContent: 'center',
         alignItems: 'center'
     },
     naviText: {
-        color: '#303030',
-        fontSize: pt(28),
+        color: '#101D37',
+        fontSize: pt(12),
+        marginTop: pt(13),
         fontWeight: 'bold',
-        marginTop: pt(26)
     }
 })
 

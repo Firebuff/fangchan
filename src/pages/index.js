@@ -8,8 +8,11 @@ import SaleScreen from './sale';
 import RentScreen from './rent';
 import HouseScreen from './house';
 
+
 // 引进tabbar
 import TabbarNavigate from './tabbar';
+
+
 
 // 根据tabbar 的激活状态，动态改变导航标题
 function getHeaderTitle(route) {
