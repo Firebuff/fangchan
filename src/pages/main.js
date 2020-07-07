@@ -139,10 +139,10 @@ class Main extends Component {
 
         if (index > this.state.currentIndex) {
             end  = (index) * normal
-            begin  = (index-1) * normal
+            begin  = (this.state.currentIndex) * normal
         } else {
             end  = (index) * normal
-            begin  = (index+1) * normal
+            begin  = (this.state.currentIndex) * normal
         }
 
 
@@ -188,9 +188,6 @@ class Main extends Component {
             inputRange: [0, 1], //输入值
             outputRange: this.state.range, //输出值
         });
-
-        // this.mirror(this.range)
-
         return (
             <ScrollView style={Styles.container}>
                 <View>
@@ -267,7 +264,10 @@ class Main extends Component {
                                 );
                             })}
                         </View>
-                        <HouseList></HouseList>
+                        {/* <HouseList></HouseList> */}
+                        <View>
+                            <Text>{ contentNavList[this.state.currentIndex].name }</Text>
+                        </View>
                     </View>
                 </View>
             </ScrollView>
@@ -352,6 +352,7 @@ const Styles = StyleSheet.create({
         alignItems: 'center',
         position: 'relative',
         backgroundColor: 'pink',
+        height: pt(44)
     },
     houseListTitleText: {
         fontSize: pt(14),
@@ -360,14 +361,15 @@ const Styles = StyleSheet.create({
         color: '#000018',
         lineHeight: pt(44),
         alignSelf: 'center',
+        height: pt(44)
     },
     activeLine: {
         width: pt(18),
         height: pt(4),
         backgroundColor: 'red',
         position: 'absolute',
-        left: pt((375 - 30) / contentNavList.length / 2 - 9),
-        bottom: pt(4),
+        left: pt((375 - 30) / contentNavList.length / 2 -pt(9)),
+        bottom: pt(-16),
     },
     textWrapper: {
         flex: 1,
