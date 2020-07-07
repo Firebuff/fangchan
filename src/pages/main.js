@@ -18,9 +18,14 @@ import NaviItem from '../components/index/navi-item';
 import Svg from '../components/svg';
 
 // 设置border-shadow的组件
-import {Card} from 'react-native-shadow-cards';
+import { Card } from 'react-native-shadow-cards';
 
 import Carousel from 'react-native-snap-carousel';
+
+import HouseList from '../components/house/list'
+
+
+
 
 let naviList = [
     {
@@ -87,6 +92,9 @@ const contentNavList = [
     {
         name: '出租房',
     },
+    {
+        name: '特价房',
+    },
 ];
 
 class Main extends Component {
@@ -126,7 +134,7 @@ class Main extends Component {
 
     cardSelect(item, index) {
         
-        let normal = pt((375-30)/3)
+        let normal = pt((375-30)/contentNavList.length)
         let end, begin;
 
         if (index > this.state.currentIndex) {
@@ -137,10 +145,9 @@ class Main extends Component {
             begin  = (index+1) * normal
         }
 
-       
-        
 
-        if (this.state.range ==  [begin, end]) {
+        if (index == this.state.currentIndex) {
+            console.log(8897)
             return
         }
 
@@ -241,15 +248,10 @@ class Main extends Component {
                     </View>
                     <View style={Styles.houseList}>
                         <View style={Styles.houseListTitle}>
-                          
-
                             <Animated.View
-                                // style={[{transform: [{translateX: spin}]}]}>
                                 style={{ left: spin }}>
-                              
                                 <View style={ [Styles.activeLine] }></View>
                             </Animated.View>
-
                             {contentNavList.map((item, index) => {
                                 return (
                                     <View style={Styles.textWrapper}>
@@ -265,6 +267,7 @@ class Main extends Component {
                                 );
                             })}
                         </View>
+                        <HouseList></HouseList>
                     </View>
                 </View>
             </ScrollView>
@@ -342,13 +345,13 @@ const Styles = StyleSheet.create({
     houseList: {
         width: pt(375 - 30),
         alignSelf: 'center',
-        backgroundColor: 'pink',
         marginTop: pt(12),
     },
     houseListTitle: {
         flexDirection: 'row',
         alignItems: 'center',
         position: 'relative',
+        backgroundColor: 'pink',
     },
     houseListTitleText: {
         fontSize: pt(14),
@@ -363,7 +366,7 @@ const Styles = StyleSheet.create({
         height: pt(4),
         backgroundColor: 'red',
         position: 'absolute',
-        left: pt((375 - 30) / 3 / 2 - 9),
+        left: pt((375 - 30) / contentNavList.length / 2 - 9),
         bottom: pt(4),
     },
     textWrapper: {
