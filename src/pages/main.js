@@ -264,7 +264,7 @@ class Main extends Component {
                                 );
                             })}
                         </View>
-                        {/* <HouseList></HouseList> */}
+                        <HouseList></HouseList>
                         <View>
                             <Text>{ contentNavList[this.state.currentIndex].name }</Text>
                         </View>
