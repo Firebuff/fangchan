@@ -4,7 +4,7 @@ import {View, Text, StyleSheet, Image} from 'react-native';
 
 import pt from '../../utils/px2dp/Px2dp';
 
-const HouseList = () => {
+const SaleList = () => {
     return (
         <View style={ styles.listContainer }>
             <View style={ styles.leftImg }>
@@ -17,7 +17,7 @@ const HouseList = () => {
             </View>
             <View style={ styles.info }>
                 <View >
-                    <Text style={ styles.title }>华润幸福里</Text>
+                    <Text style={ styles.title } numberOfLines={1} ellipsizeMode="tail">华润幸福里润幸福里润幸福里</Text>
                 </View>
 
                 <View>
@@ -28,15 +28,15 @@ const HouseList = () => {
                     <Text style={ styles.tag }>普通住宅</Text>
                 </View>
                 <View  style={ [styles.tagList,{alignItems: 'baseline'}] }>
-                    <Text  style={ styles.price }>17500</Text>
-                    <Text  style={ styles.unit }>元/m²</Text>
+                    <Text  style={ styles.price }>350</Text>
+                    <Text  style={ styles.unit }>万</Text>
                     <Text  style={ styles.size }>建面98-157m²</Text>
                 </View>
             </View>
         </View>
     );
 };
-export default HouseList;
+export default SaleList;
 
 const styles = StyleSheet.create({
     listContainer: {
@@ -53,7 +53,8 @@ const styles = StyleSheet.create({
     title: {
         fontSize: pt(16),
         fontWeight: 'bold',
-        color: '#101D37'
+        color: '#101D37',
+        width: pt(180)
     },
     leftImg: {
         marginRight: pt(12),
@@ -100,6 +101,6 @@ const styles = StyleSheet.create({
     img: {
         width: pt(124), 
         height: pt(96),
-        borderRadius: pt(4)
+        borderRadius: pt(4),
     }
 });

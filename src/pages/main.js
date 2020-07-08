@@ -18,14 +18,15 @@ import NaviItem from '../components/index/navi-item';
 import Svg from '../components/svg';
 
 // 设置border-shadow的组件
-import { Card } from 'react-native-shadow-cards';
+import {Card} from 'react-native-shadow-cards';
 
 import Carousel from 'react-native-snap-carousel';
 
-import HouseList from '../components/house/list'
+import HouseList from '../components/house/list';
 
+import SaleList from '../components/sale/list';
 
-
+import Swiper from 'react-native-swiper';
 
 let naviList = [
     {
@@ -113,12 +114,11 @@ class Main extends Component {
                 },
             ],
             range: [0, 0],
-            currentIndex: 0
+            currentIndex: 0,
         };
         this.animateVal = new Animated.Value(0);
 
-        this.spin = null
-
+        this.spin = null;
     }
 
     _renderItem({item, index}) {
@@ -133,34 +133,28 @@ class Main extends Component {
     }
 
     cardSelect(item, index) {
-        
-        let normal = pt((375-30)/contentNavList.length)
+        let normal = pt((375 - 30) / contentNavList.length);
         let end, begin;
 
         if (index > this.state.currentIndex) {
-            end  = (index) * normal
-            begin  = (this.state.currentIndex) * normal
+            end = index * normal;
+            begin = this.state.currentIndex * normal;
         } else {
-            end  = (index) * normal
-            begin  = (this.state.currentIndex) * normal
+            end = index * normal;
+            begin = this.state.currentIndex * normal;
         }
 
-
         if (index == this.state.currentIndex) {
-            console.log(8897)
-            return
+            console.log(8897);
+            return;
         }
 
         this.setState({
             range: [begin, end],
-            currentIndex: index
-        })
-
+            currentIndex: index,
+        });
 
         this.moveLine();
-
-        
-
     }
 
     //旋转方法
@@ -174,7 +168,6 @@ class Main extends Component {
     };
 
     mirror = (arr) => {
-        
         this.spin = this.animateVal.interpolate({
             inputRange: [0, 1], //输入值
             outputRange: arr, //输出值
@@ -183,20 +176,36 @@ class Main extends Component {
     };
 
     render() {
-        
         const spin = this.animateVal.interpolate({
             inputRange: [0, 1], //输入值
             outputRange: this.state.range, //输出值
         });
+
+        let showWhichList;
+
+        if (this.state.currentIndex == 0) {
+            showWhichList = <HouseList></HouseList>;
+        } else if (this.state.currentIndex == 1) {
+            showWhichList = <SaleList></SaleList>;
+        } else {
+            showWhichList = null;
+        }
+
         return (
             <ScrollView style={Styles.container}>
                 <View>
                     <View style={Styles.headerImg}>
-                        <Text
-                            allowFontScaling={false}
-                            style={Styles.headerImgText}>
-                            新房
-                        </Text>
+                        <Swiper style={Styles.wrapper} showsButtons={true}>
+                            <View style={Styles.slide1}>
+                                <Text style={Styles.text}>Hello Swiper</Text>
+                            </View>
+                            <View style={Styles.slide2}>
+                                <Text style={Styles.text}>Beautiful</Text>
+                            </View>
+                            <View style={Styles.slide3}>
+                                <Text style={Styles.text}>And simple</Text>
+                            </View>
+                        </Swiper>
                     </View>
                     <View style={Styles.mainContentWrapper}>
                         <Card cornerRadius={pt(4)} style={{width: '100%'}}>
@@ -243,53 +252,46 @@ class Main extends Component {
                             </View>
                         </Card>
                     </View>
+
                     <View style={Styles.houseList}>
-                        <View style={Styles.houseListTitle}>
-                            <Animated.View
-                                style={{ left: spin }}>
-                                <View style={ [Styles.activeLine] }></View>
-                            </Animated.View>
-                            {contentNavList.map((item, index) => {
-                                return (
-                                    <View style={Styles.textWrapper}>
-                                        <Text
-                                            style={Styles.houseListTitleText}
-                                            onPress={() => {
-                                                this.cardSelect(item, index);
-                                            }}
-                                            key={index}>
-                                            {item.name}
-                                        </Text>
-                                    </View>
-                                );
-                            })}
-                        </View>
-                        <HouseList></HouseList>
-                        <View>
-                            <Text>{ contentNavList[this.state.currentIndex].name }</Text>
-                        </View>
+                        <Card cornerRadius={pt(4)} style={{width: '100%'}}>
+                            <View style={Styles.houseListTitle}>
+                                <Animated.View style={{left: spin}}>
+                                    <View style={[Styles.activeLine]}></View>
+                                </Animated.View>
+                                {contentNavList.map((item, index) => {
+                                    return (
+                                        <View style={Styles.textWrapper}>
+                                            <Text
+                                                style={
+                                                    Styles.houseListTitleText
+                                                }
+                                                onPress={() => {
+                                                    this.cardSelect(
+                                                        item,
+                                                        index,
+                                                    );
+                                                }}
+                                                key={index}>
+                                                {item.name}
+                                            </Text>
+                                        </View>
+                                    );
+                                })}
+                            </View>
+                            <View style={Styles.ListContent}>
+                                {showWhichList}
+                            </View>
+                            <View style={ Styles.getMoreWrapper }>
+                                <Text style={ Styles.getMore }>查看更多</Text>
+                            </View>
+                        </Card>
                     </View>
                 </View>
             </ScrollView>
         );
     }
 }
-
-const layout = (ref) => {
-    const handle = findNodeHandle(ref);
-    return new Promise((resolve) => {
-        UIManager.measure(handle, (x, y, width, height, pageX, pageY) => {
-            resolve({
-                x,
-                y,
-                width,
-                height,
-                pageX,
-                pageY,
-            });
-        });
-    });
-};
 
 const Styles = StyleSheet.create({
     container: {
@@ -317,7 +319,6 @@ const Styles = StyleSheet.create({
         justifyContent: 'space-around',
         flexWrap: 'wrap',
         backgroundColor: '#fff',
-        paddingBottom: pt(1),
     },
     navListWrapper: {
         marginTop: pt(15),
@@ -346,13 +347,17 @@ const Styles = StyleSheet.create({
         width: pt(375 - 30),
         alignSelf: 'center',
         marginTop: pt(12),
+        marginBottom: pt(2),
     },
     houseListTitle: {
         flexDirection: 'row',
         alignItems: 'center',
         position: 'relative',
-        backgroundColor: 'pink',
-        height: pt(44)
+        backgroundColor: '#fff',
+        height: pt(44),
+        borderBottomColor: '#f9f9f9',
+        borderBottomWidth: pt(1),
+        borderStyle: 'solid',
     },
     houseListTitleText: {
         fontSize: pt(14),
@@ -361,19 +366,65 @@ const Styles = StyleSheet.create({
         color: '#000018',
         lineHeight: pt(44),
         alignSelf: 'center',
-        height: pt(44)
+        height: pt(44),
     },
     activeLine: {
         width: pt(18),
         height: pt(4),
-        backgroundColor: 'red',
+        backgroundColor: '#fd6958',
         position: 'absolute',
-        left: pt((375 - 30) / contentNavList.length / 2 -pt(9)),
+        left: pt((375 - 30) / contentNavList.length / 2 - pt(9)),
         bottom: pt(-16),
+        borderRadius: pt(10),
     },
     textWrapper: {
         flex: 1,
     },
+    ListContent: {
+        paddingLeft: pt(15),
+        paddingRight: pt(15),
+        width: '100%',
+    },
+    slide1: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: '#9DD6EB',
+    },
+    slide2: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: '#97CAE5',
+    },
+    slide3: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: '#92BBD9',
+    },
+    text: {
+        color: '#fff',
+        fontSize: 30,
+        fontWeight: 'bold',
+    },
+    getMore: {
+        alignSelf: 'center',
+        lineHeight: pt(44),
+        fontSize: pt(16),
+        backgroundColor: '#f9f9f9',
+        color: '#d5ddec'
+    },
+    getMoreWrapper: {
+        backgroundColor: '#f9f9f9',
+        width: pt(375-60),
+        alignSelf: 'center',
+        paddingRight: pt(15),
+        paddingLeft: pt(15),
+        height: pt(44),
+        marginBottom: pt(16),
+        borderRadius: pt(4)
+    }
 });
 
 export default Main;
