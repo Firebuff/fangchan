@@ -4,20 +4,20 @@ import {View, Text, StyleSheet, Image} from 'react-native';
 
 import pt from '../../utils/px2dp/Px2dp';
 
-const HouseList = () => {
+const HouseList = (props) => {
     return (
         <View style={ styles.listContainer }>
             <View style={ styles.leftImg }>
                 <Image
                     style={ styles.img }
                     source={{
-                        uri: 'https://house.08cms.com/thumb/uploads/house/000/00/00/1/000/002/390d87cc5e91f4450a46103e340f4eec.jpg',
+                        uri: props.thumb
                     }}
                 />
             </View>
             <View style={ styles.info }>
                 <View >
-                    <Text style={ styles.title }>华润幸福里</Text>
+                    <Text style={ styles.title }>{ props.name }</Text>
                 </View>
 
                 <View>
