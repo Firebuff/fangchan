@@ -252,7 +252,6 @@ class Main extends Component {
                             </View>
                         </Card>
                     </View>
-
                     <View style={Styles.houseList}>
                         <Card cornerRadius={pt(4)} style={{width: '100%'}}>
                             <View style={Styles.houseListTitle}>

@@ -10,6 +10,7 @@ const HouseList = (props) => {
             <View style={ styles.leftImg }>
                 <Image
                     style={ styles.img }
+                    resizeMode='cover'
                     source={{
                         uri: props.thumb
                     }}
@@ -17,7 +18,7 @@ const HouseList = (props) => {
             </View>
             <View style={ styles.info }>
                 <View >
-                    <Text style={ styles.title }>{ props.name }</Text>
+                    <Text style={ styles.title }  ellipsizeMode="tail" numberOfLines={1}>{ props.name }</Text>
                 </View>
 
                 <View>
@@ -53,10 +54,20 @@ const styles = StyleSheet.create({
     title: {
         fontSize: pt(16),
         fontWeight: 'bold',
-        color: '#101D37'
+        color: '#101D37',
+        width: pt(180)
     },
     leftImg: {
         marginRight: pt(12),
+        width: pt(124), 
+        height: pt(96),
+        borderRadius: pt(4),
+    },
+    img: {
+        borderRadius: pt(4),
+        borderColor: 'red',
+        width: pt(124), 
+        height: pt(96),
     },
     addr: {
         fontSize: pt(12),
@@ -97,9 +108,4 @@ const styles = StyleSheet.create({
         color: '#919AAA',
         lineHeight: pt(18)
     },
-    img: {
-        width: pt(124), 
-        height: pt(96),
-        borderRadius: pt(4)
-    }
 });
