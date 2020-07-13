@@ -1,14 +1,18 @@
-import React from 'react'
+import React from 'react';
 
-import { View, Text } from 'react-native'
+import { View, Text, Header } from 'react-native';
 
+import {Button} from 'react-native-elements';
+import Icon from 'react-native-vector-icons/FontAwesome';
 
 const Sale = () => {
-	return (
-		<View>
-			<Text>二手房</Text>
-		</View>
-	)
-}
+    return (
+        <View>
+			
+            <Text>二手房</Text>
+            
+        </View>
+    );
+};
 
-export default Sale
+export default Sale;

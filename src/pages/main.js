@@ -208,7 +208,7 @@ class Main extends Component {
                         </Swiper>
                     </View>
                     <View style={Styles.mainContentWrapper}>
-                        <Card cornerRadius={pt(4)} style={{width: '100%'}}>
+                        <Card cornerRadius={pt(4)} style={{width: '100%'}}  elevation={pt(1)}>
                             <View style={Styles.mainContent}>
                                 <View style={Styles.navListWrapper}>
                                     <View style={Styles.navList}>
@@ -253,7 +253,7 @@ class Main extends Component {
                         </Card>
                     </View>
                     <View style={Styles.houseList}>
-                        <Card cornerRadius={pt(4)} style={{width: '100%'}}>
+                        <Card cornerRadius={pt(4)} style={{width: '100%'}}  elevation={pt(1)}>
                             <View style={Styles.houseListTitle}>
                                 <Animated.View style={{left: spin}}>
                                     <View style={[Styles.activeLine]}></View>
@@ -346,7 +346,7 @@ const Styles = StyleSheet.create({
         width: pt(375 - 30),
         alignSelf: 'center',
         marginTop: pt(12),
-        marginBottom: pt(2),
+        marginBottom: pt(20),
     },
     houseListTitle: {
         flexDirection: 'row',
