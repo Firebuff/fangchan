@@ -73,8 +73,7 @@ class House extends Component {
     render() {
         return (
             <View style={{ alignSelf: 'center',width: pt(375-20), marginBottom: pt(15),marginTop: pt(10)}}>
-                 <Loaing></Loaing>
-                {/* <Card
+                <Card
                     cornerRadius={pt(4)}
                     elevation={1}
                     style={{width: '100%', alignItems: 'center',paddingBottom: pt(15)}}>
@@ -93,12 +92,10 @@ class House extends Component {
                         ListEmptyComponent = { () => { return <Text>77</Text>} }
                         progressViewOffset={10}
                         ListFooterComponent={
-                            <Text style={{textAlign: "center",marginBottom: 10}}>
-                                { this.state.loadMore? '正在加载更多' : '到底了'}
-                            </Text>
+                            <Loaing finished={ this.state.loadMore }></Loaing>
                         }
                     />
-                </Card> */}
+                </Card>
                
             </View>
         );
