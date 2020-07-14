@@ -32,7 +32,9 @@ class House extends Component {
 
     getData() {
         if (!this.state.loadMore) return
+        console.log(888)
         getHouseList(this.state.requestParam.pageIndex).then((res) => {
+            console.log(res)
             if (res.status == 1) {
                 let newPageIndex;
 
@@ -71,9 +73,12 @@ class House extends Component {
         this.setState({
             refreshing: true,
             listData: [],
-            requestParam
+            requestParam,
+            loadMore: true
+        }, () => {
+            this.getData()
         })
-        this.getData()
+        
     }
 
     renderItem(item) {

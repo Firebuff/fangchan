@@ -8,9 +8,7 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 const Sale = () => {
     return (
         <View>
-			
             <Text>二手房</Text>
-            
         </View>
     );
 };
