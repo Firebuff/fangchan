@@ -21,7 +21,8 @@ class House extends Component {
             requestParam: {
                 pageIndex: 1,
             },
-            loadMore: true
+            loadMore: true,
+            refreshing: false
 
         };
     }
@@ -32,9 +33,7 @@ class House extends Component {
     getData() {
         if (!this.state.loadMore) return
         getHouseList(this.state.requestParam.pageIndex).then((res) => {
-            console.log(res)
             if (res.status == 1) {
-
                 let newPageIndex;
 
                 let loadMore = true
@@ -60,10 +59,21 @@ class House extends Component {
                 this.setState({
                     requestParam: param,
                     listData: listData,
-                    loadMore: loadMore
+                    loadMore: loadMore,
+                    refreshing: false
                 });
             }
         });
+    }
+
+    refresh () {
+        let requestParam = {...this.state.requestParam, pageIndex: 1 }
+        this.setState({
+            refreshing: true,
+            listData: [],
+            requestParam
+        })
+        this.getData()
     }
 
     renderItem(item) {
@@ -76,7 +86,7 @@ class House extends Component {
                 <Card
                     cornerRadius={pt(4)}
                     elevation={1}
-                    style={{width: '100%', alignItems: 'center',paddingBottom: pt(15)}}>
+                    style={{width: '100%', alignItems: 'center',}}>
                     <FlatList
 						style={{width: '100%', paddingLeft: pt(15),paddingRight: pt(15),}}
                         data={this.state.listData}
@@ -87,13 +97,16 @@ class House extends Component {
                             this.getData();
                         }}
                         numColumns = { 1 }
-                        refreshing = { true }
+                        refreshing = { this.state.refreshing }
                         initialNumToRender = { 5 }
-                        ListEmptyComponent = { () => { return <Text>77</Text>} }
+                        //ListEmptyComponent = { () => { return <Text>77</Text>} }
                         progressViewOffset={10}
                         ListFooterComponent={
                             <Loaing finished={ this.state.loadMore }></Loaing>
                         }
+                        onRefresh = { () => {
+                            this.refresh()
+                        } }
                     />
                 </Card>
                
