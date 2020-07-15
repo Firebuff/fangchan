@@ -1,17 +1,9 @@
-export const getHouseList = (pageIndex) => {
+import { get } from './methods'
 
- 
+export const getHouseList = (params) => {
+    return get('webapp/houseslist', params)
+}
 
-    let url = `https://house.08cms.com/webapp/houseslist?pageIndex=${pageIndex}`
-
-    
-
-    return fetch(url).then( (res) => {
-        // console.log(res)
-        if (res.status == 200) {
-            return res.json()
-        }
-    }).catch((err) => {
-        console.log(err)
-    })
+export const getFilter = (tag) => {
+    return get('webapp/filter',{tag:tag})
 }

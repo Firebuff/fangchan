@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 
 import {View, Text, FlatList} from 'react-native';
 
-import {getHouseList} from '../api';
+import { getHouseList } from '../api';
 
 import HouseList from '../components/house/list';
 
@@ -32,8 +32,7 @@ class House extends Component {
 
     getData() {
         if (!this.state.loadMore) return
-        console.log(888)
-        getHouseList(this.state.requestParam.pageIndex).then((res) => {
+        getHouseList(this.state.requestParam).then((res) => {
             console.log(res)
             if (res.status == 1) {
                 let newPageIndex;
@@ -66,6 +65,7 @@ class House extends Component {
                 });
             }
         });
+        
     }
 
     refresh () {
