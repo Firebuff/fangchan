@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 
 import {View, Text, FlatList} from 'react-native';
 
-import { getHouseList } from '../api';
+import {getHouseList} from '../api';
 
 import HouseList from '../components/house/list';
 
@@ -13,6 +13,8 @@ import pt from '../utils/px2dp/Px2dp';
 
 import Loaing from '../components/loading';
 
+import Selects from '../components/select/index';
+
 class House extends Component {
     constructor(props) {
         super(props);
@@ -22,63 +24,63 @@ class House extends Component {
                 pageIndex: 1,
             },
             loadMore: true,
-            refreshing: false
-
+            refreshing: false,
         };
     }
     componentDidMount() {
-        this.getData();
+        this.getData(this);
     }
 
-    getData() {
-        if (!this.state.loadMore) return
-        getHouseList(this.state.requestParam).then((res) => {
-            console.log(res)
+    getData(that, params) {
+
+        let questParams = {...that.state.requestParam, ...params}
+        if (!that.state.loadMore) return;
+        getHouseList(questParams).then((res) => {
+            console.log(res);
             if (res.status == 1) {
                 let newPageIndex;
 
-                let loadMore = true
+                let loadMore = true;
 
-                if (this.state.requestParam.pageIndex != res.pageAllIndex) {
+                if (that.state.requestParam.pageIndex != res.pageAllIndex) {
                     // 设置请求页数 + 1，下次请求的页数
-                    newPageIndex = this.state.requestParam.pageIndex + 1;
+                    newPageIndex = that.state.requestParam.pageIndex + 1;
                 } else {
-                    newPageIndex = this.state.requestParam.pageIndex
+                    newPageIndex = that.state.requestParam.pageIndex;
 
-                    loadMore = false
+                    loadMore = false;
                 }
 
-
                 let param = {
-                    ...this.state.requestParam,
+                    ...that.state.requestParam,
                     pageIndex: newPageIndex,
                 };
 
+                let listData = [...that.state.listData, ...res.data];
 
-                let listData = [...this.state.listData, ...res.data];
-
-                this.setState({
+                that.setState({
                     requestParam: param,
                     listData: listData,
                     loadMore: loadMore,
-                    refreshing: false
+                    refreshing: false,
                 });
             }
         });
-        
     }
 
-    refresh () {
-        let requestParam = {...this.state.requestParam, pageIndex: 1 }
-        this.setState({
-            refreshing: true,
-            listData: [],
-            requestParam,
-            loadMore: true
-        }, () => {
-            this.getData()
-        })
-        
+    refresh() {
+        let requestParam = {...this.state.requestParam, pageIndex: 1};
+        this.setState(
+            {
+                refreshing: true,
+                listData: [],
+                requestParam,
+                loadMore: true,
+            },
+            () => {
+                this.getData(this);
+            },
+        );
     }
 
     renderItem(item) {
@@ -87,34 +89,56 @@ class House extends Component {
 
     render() {
         return (
-            <View style={{ alignSelf: 'center',width: pt(375-20), marginBottom: pt(15),marginTop: pt(10)}}>
-                <Card
-                    cornerRadius={pt(4)}
-                    elevation={1}
-                    style={{width: '100%', alignItems: 'center',}}>
-                    <FlatList
-						style={{width: '100%', paddingLeft: pt(15),paddingRight: pt(15),}}
-                        data={this.state.listData}
-                        renderItem={this.renderItem}
-                        keyExtractor={(item, index) => index}
-                        onEndReachedThreshold={0.01}
-                        onEndReached={() => {
-                            this.getData();
-                        }}
-                        numColumns = { 1 }
-                        refreshing = { this.state.refreshing }
-                        initialNumToRender = { 5 }
-                        //ListEmptyComponent = { () => { return <Text>77</Text>} }
-                        progressViewOffset={10}
-                        ListFooterComponent={
-                            <Loaing finished={ this.state.loadMore }></Loaing>
-                        }
-                        onRefresh = { () => {
-                            this.refresh()
-                        } }
-                    />
-                </Card>
-               
+            <View style={{height: '100%'}}>
+                <View
+                    style={{
+                        alignSelf: 'center',
+                        width: pt(375 - 20),
+                        height: '100%',
+                    }}>
+                    <Card
+                        cornerRadiuts={pt(4)}
+                        elevation={1}
+                        style={{
+                            width: '100%',
+                            alignItems: 'center',
+                            height: '98%',
+                            paddingTop: 10,
+                            marginTop: pt(5),
+                            position: 'absolute',
+                            zIndex: 5,
+                            top: 0,
+                        }}>
+                        <Selects that = {this} getData = {this.getData}></Selects>
+
+                        <FlatList
+                            style={{
+                                width: '100%',
+                                height: '100%',
+                                paddingLeft: pt(15),
+                                paddingRight: pt(15),
+                            }}
+                            data={this.state.listData}
+                            renderItem={this.renderItem}
+                            keyExtractor={(item, index) => index}
+                            onEndReachedThreshold={0.01}
+                            onEndReached={() => {
+                                this.getData();
+                            }}
+                            numColumns={1}
+                            refreshing={this.state.refreshing}
+                            initialNumToRender={5}
+                            //ListEmptyComponent = { () => { return <Text>77</Text>} }
+                            progressViewOffset={10}
+                            ListFooterComponent={
+                                <Loaing finished={this.state.loadMore}></Loaing>
+                            }
+                            onRefresh={() => {
+                                this.refresh();
+                            }}
+                        />
+                    </Card>
+                </View>
             </View>
         );
     }

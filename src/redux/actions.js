@@ -1,4 +1,7 @@
-import { PLUS, MINUS } from './action-type'
+import { PLUS, MINUS, GETHOUSElIST } from './action-type'
+
+
+import { getHouseList } from '../api';
 
 export const plusTotal = function (data) {
 	return {

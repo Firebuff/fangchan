@@ -1,6 +1,6 @@
 import qs from 'qs'
 
-const baseUrl = 'https://house.08cms.com/'
+const baseUrl = 'http://www.ruianfang.com/'
 
 export const get = (controller, params = {}) => {
     // 参数拼接

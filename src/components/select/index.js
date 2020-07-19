@@ -14,17 +14,18 @@ import {
 } from 'react-native';
 
 import {Button} from 'react-native-elements';
+
 import Icon from 'react-native-vector-icons/FontAwesome';
 
-import pt from '../utils/px2dp/Px2dp';
+import pt from '../../utils/px2dp/Px2dp';
 
-import {getFilter} from '../api';
+import {getFilter} from '../../api';
 
-import Svg from '../components/svg';
+import Svg from '../svg';
 
 const screenHeight = Dimensions.get('window').height;
 
-class Sale extends Component {
+class Select extends Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -36,6 +37,7 @@ class Sale extends Component {
             moreList: [],
             selectParams: {},
             hideMarsk: true,
+            zIndex: 0
         };
         this.spinValue = new Animated.Value(0);
         this.height = 0;
@@ -77,7 +79,9 @@ class Sale extends Component {
         }).start(() => {
             this.setState({
                 hideMarsk: !this.state.hideMarsk,
+                zIndex: this.state.zIndex == 5? 0 : 5
             });
+          
         });
     };
 
@@ -195,6 +199,12 @@ class Sale extends Component {
                     item.activeIndex = index;
                     return item;
                 });
+                if (i < 3) {
+                    //如果弹出框未弹出，则执行打开的动画
+                    this.range = [pt(254), 0 ];
+                    this.opacityRange = [1, 0];
+                    this.spin(index);
+                }
                 break;
             }
         }
@@ -315,11 +325,11 @@ class Sale extends Component {
                         onPress={() => {
                             that.marskClickHandle();
                         }}
-                        style={{height: '100%', width: '100%'}}>
+                        style={{height: '100%', width: '100%',}}>
                         <View
                             style={{
-                                height: screenHeight,
-                                width: pt(375),
+                                height: '100%',
+                                width: '100%',
                             }}>
                             <Text>777</Text>
                         </View>
@@ -327,6 +337,16 @@ class Sale extends Component {
                 </View>
             );
         }
+    }
+
+    searchFunc (params) {
+        let reset = {...this.props.that.requestParam, pageIndex: 1}
+        this.props.that.setState({
+            requestParam: reset
+        }, () => {
+            this.props.getData(this.props.that, params)
+        })
+        
     }
 
     buttonComponent(that) {
@@ -343,13 +363,12 @@ class Sale extends Component {
                     />
                     <Button
                         title="确定"
-                        onPress={() => Alert.alert('Simple Button pressed')}
+                        onPress={() => { this.searchFunc(this.props.that,{name:'万科'}) } }
                         buttonStyle={styles.confirmtBtn}
                     />
                 </View>
             );
         } else {
-            return null;
         }
     }
     marskClickHandle() {
@@ -370,8 +389,10 @@ class Sale extends Component {
             outputRange: this.opacityRange, //输出值
         });
 
+        console.log(this.props)
+
         return (
-            <View style={{height: pt(254)}}>
+            <View style={{ position: 'relative', width: pt(375-20), height: pt(46), }}>
                 <View style={styles.navWrapper}>
                     {navList.map((item, index) => {
                         return (
@@ -398,7 +419,7 @@ class Sale extends Component {
                 <Animated.View
                     style={[
                         styles.animate,
-                        {height: spin, position: 'relative'},
+                        {height: spin,},
                     ]}>
                     <View style={styles.selectArea}>
                         <ScrollView>
@@ -414,10 +435,12 @@ class Sale extends Component {
                 <Animated.View
                     style={[
                         styles.marsk,
-                        {opacity: opacity, height: screenHeight},
+                        {opacity: opacity, height: screenHeight,zIndex: this.state.zIndex },
                     ]}>
                     {this.marskComponent(this)}
                 </Animated.View>
+
+                
             </View>
         );
     }
@@ -430,6 +453,8 @@ const styles = StyleSheet.create({
         borderBottomColor: 'rgba(249,249,249,1)',
         borderBottomWidth: pt(1),
         backgroundColor: '#fff',
+        width: '100%',
+        // backgroundColor: 'red',
     },
     navWrapperText: {
         fontSize: pt(14),
@@ -439,14 +464,14 @@ const styles = StyleSheet.create({
         marginRight: pt(-6)
     },
     animate: {
-        position: 'relative',
-        zIndex: 10,
+        zIndex: 100,
     },
     selectArea: {
         height: '100%',
-        width: pt(375),
+        width: '100%',
         backgroundColor: 'pink',
-        overflow: 'hidden',
+        position: 'absolute',
+        zIndex: 100
     },
     selectContent: {
         paddingLeft: pt(20),
@@ -512,11 +537,12 @@ const styles = StyleSheet.create({
         width: pt(375),
         backgroundColor: 'rgba(0,0,0,.1)',
         position: 'absolute',
-        zIndex: -1,
+        top: pt(46),
+        width: '100%',
     },
     activeColor: {
         color: '#F04531'
     }
 });
 
-export default Sale;
+export default Select
