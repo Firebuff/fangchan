@@ -15,6 +15,13 @@ import Loaing from '../components/loading';
 
 import Selects from '../components/select/index';
 
+import { getList } from '../redux/actions'
+
+import { connect } from 'react-redux'
+
+
+
+
 class House extends Component {
     constructor(props) {
         super(props);
@@ -28,7 +35,8 @@ class House extends Component {
         };
     }
     componentDidMount() {
-        this.getData(this);
+        //this.getData(this);
+        this.props.getList()
     }
 
     getData(that, params) {
@@ -78,7 +86,7 @@ class House extends Component {
                 loadMore: true,
             },
             () => {
-                this.getData(this);
+                //this.getData(this);
             },
         );
     }
@@ -88,6 +96,8 @@ class House extends Component {
     }
 
     render() {
+        console.log(this.props)
+        let list = this.props.houseListData.list
         return (
             <View style={{height: '100%'}}>
                 <View
@@ -109,7 +119,7 @@ class House extends Component {
                             zIndex: 5,
                             top: 0,
                         }}>
-                        <Selects that = {this} getData = {this.getData}></Selects>
+                        {/*<Selects that = {this} getData = {this.getData}></Selects>*/}
 
                         <FlatList
                             style={{
@@ -118,12 +128,12 @@ class House extends Component {
                                 paddingLeft: pt(15),
                                 paddingRight: pt(15),
                             }}
-                            data={this.state.listData}
+                            data={list}
                             renderItem={this.renderItem}
                             keyExtractor={(item, index) => index}
                             onEndReachedThreshold={0.01}
                             onEndReached={() => {
-                                this.getData();
+                                //this.getData();
                             }}
                             numColumns={1}
                             refreshing={this.state.refreshing}
@@ -144,4 +154,6 @@ class House extends Component {
     }
 }
 
-export default House;
+
+
+export default  connect((state) => ({houseListData: state.houseListData}), {getList}) (House)         

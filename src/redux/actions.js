@@ -1,40 +1,20 @@
-import { PLUS, MINUS, GETHOUSElIST } from './action-type'
-
+import { PLUS, MINUS, SETHOUSElIST } from './action-type'
 
 import { getHouseList } from '../api';
 
-export const plusTotal = function (data) {
+function setHouseList (data) {
 	return {
-		type: PLUS,
-		data: data
+		type: SETHOUSElIST,
+		list: data
 	}
 }
 
-export const minusTotal = function (data) {
-	return {
-		type: MINUS,
-		data: data
-	}
-}
-
-
-export const asyncPlus = function (number) {
-	
+export const getList = (params) => {
 	return async function (dispatch) {
-		
-		function KO () {
-			return new Promise( (resolve,reject) => {
-				setTimeout(() => {
-					resolve(21)
-				},5000)
-			}).catch(err=> {
-				console.log(err)
-			})
+		let res = await getHouseList(params)
+		console.log(res)
+		if (res.status == 1) {
+			dispatch(setHouseList(res.data))
 		}
-
-		let a = await KO()
-
-		dispatch(plusTotal(a))
 	}
-
 }

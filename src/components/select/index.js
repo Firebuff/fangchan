@@ -133,7 +133,7 @@ class Select extends Component {
 
     componentDidMount() {
         getFilter('houses').then((res) => {
-            console.log(res);
+            //console.log(res);
             let choiseList = [];
             let choiseNavList = [];
             //为每个数组里面的元素添加一个 选项类型标志key， 以及当前激活的下标， 首项不限
@@ -181,7 +181,7 @@ class Select extends Component {
                 }
             }
         });
-        console.log(navList);
+        //console.log(navList);
         return navList;
     }
 
@@ -209,7 +209,7 @@ class Select extends Component {
             }
         }
         selectParams = {...this.state.selectParams, [key]: value};
-        console.log(selectParams);
+        //console.log(selectParams);
         //console.log(list)
 
         this.setState(
@@ -299,7 +299,7 @@ class Select extends Component {
     }
 
     resetHandle() {
-        console.log(88);
+        //console.log(88);
         let list = this.state.choiseList;
         list.forEach((rootItem, rootIndex) => {
             if (rootIndex > 2) {
@@ -308,13 +308,13 @@ class Select extends Component {
                 });
             }
         });
-        console.log(list);
+        //console.log(list);
         this.setState({
             choiseList: list,
         });
     }
     marskComponent(that) {
-        console.log(that.state.hideMarsk);
+        //console.log(that.state.hideMarsk);
         if (that.state.hideMarsk) {
             return null;
         } else {
@@ -372,7 +372,7 @@ class Select extends Component {
         }
     }
     marskClickHandle() {
-        console.log('handle');
+        //console.log('handle');
         this.navClickHandle(this.state.currentNavIndex);
     }
 
@@ -389,7 +389,7 @@ class Select extends Component {
             outputRange: this.opacityRange, //输出值
         });
 
-        console.log(this.props)
+        //console.log(this.props)
 
         return (
             <View style={{ position: 'relative', width: pt(375-20), height: pt(46), }}>

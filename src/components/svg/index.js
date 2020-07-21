@@ -10,7 +10,7 @@ class Svg extends Component {
     }
    
     render () {
-        console.log(this.props)
+        //console.log(this.props)
         let { width, height, name } = this.props
         return (
             <SvgUri width={ width } height={ height } svgXmlData={ getSvg(name) } />
