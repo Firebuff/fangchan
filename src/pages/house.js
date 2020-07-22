@@ -15,7 +15,7 @@ import Loaing from '../components/loading';
 
 import Selects from '../components/select/index';
 
-import { getList } from '../redux/actions'
+import { loadHouseList, clearAll } from '../redux/actions'
 
 import { connect } from 'react-redux'
 
@@ -35,64 +35,31 @@ class House extends Component {
         };
     }
     componentDidMount() {
-        //this.getData(this);
-        this.props.getList()
+        this.getData()
     }
 
-    getData(that, params) {
-
-        let questParams = {...that.state.requestParam, ...params}
-        if (!that.state.loadMore) return;
-        getHouseList(questParams).then((res) => {
-            console.log(res);
-            if (res.status == 1) {
-                let newPageIndex;
-
-                let loadMore = true;
-
-                if (that.state.requestParam.pageIndex != res.pageAllIndex) {
-                    // 设置请求页数 + 1，下次请求的页数
-                    newPageIndex = that.state.requestParam.pageIndex + 1;
-                } else {
-                    newPageIndex = that.state.requestParam.pageIndex;
-
-                    loadMore = false;
-                }
-
-                let param = {
-                    ...that.state.requestParam,
-                    pageIndex: newPageIndex,
-                };
-
-                let listData = [...that.state.listData, ...res.data];
-
-                that.setState({
-                    requestParam: param,
-                    listData: listData,
-                    loadMore: loadMore,
-                    refreshing: false,
-                });
-            }
-        });
+    getData (refresh) {
+        let state =  this.props.houseListData
+        let params = {
+            requestParams: state.requestParams,
+            isMore: state.isMore, // 是否还有更多数据
+            refresh: refresh,
+            currentPageIndex: state.requestParams.pageIndex //当前页面
+        }
+        this.props.loadHouseList(params)
     }
+
+    loadMore () {
+        this.getData(false)
+    }
+
 
     refresh() {
-        let requestParam = {...this.state.requestParam, pageIndex: 1};
-        this.setState(
-            {
-                refreshing: true,
-                listData: [],
-                requestParam,
-                loadMore: true,
-            },
-            () => {
-                //this.getData(this);
-            },
-        );
+        this.getData(true)
     }
 
     renderItem(item) {
-        return <HouseList {...item.item}></HouseList>;
+        return <HouseList {...item.item} key={ item.id }></HouseList>;
     }
 
     render() {
@@ -130,10 +97,10 @@ class House extends Component {
                             }}
                             data={list}
                             renderItem={this.renderItem}
-                            keyExtractor={(item, index) => index}
+                            keyExtractor={(item, index) => index.toString()}
                             onEndReachedThreshold={0.01}
                             onEndReached={() => {
-                                //this.getData();
+                                this.loadMore()
                             }}
                             numColumns={1}
                             refreshing={this.state.refreshing}
@@ -156,4 +123,4 @@ class House extends Component {
 
 
 
-export default  connect((state) => ({houseListData: state.houseListData}), {getList}) (House)         
+export default  connect((state) => ({houseListData: state.houseListData}), {loadHouseList}) (House)         

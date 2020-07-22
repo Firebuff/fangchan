@@ -1,4 +1,7 @@
 export const PLUS = 'plus'
 export const MINUS = 'minus'
-
-export const SETHOUSElIST = 'sethouselist'
+export const LOADMORE = 'loadmore'
+export const CLEARHOUSELIST = 'clearhouselist'
+export const SETPAGEINDEX = 'setpageindex'
+export const ISMORE = 'ismore'
+export const CLEARLIST = 'clearlist'
