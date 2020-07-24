@@ -23,6 +23,8 @@ import {getFilter} from '../../api';
 
 import Svg from '../svg';
 
+import {connect} from 'react-redux';
+
 const screenHeight = Dimensions.get('window').height;
 
 class Select extends Component {
@@ -37,7 +39,7 @@ class Select extends Component {
             moreList: [],
             selectParams: {},
             hideMarsk: true,
-            zIndex: 0
+            zIndex: 0,
         };
         this.spinValue = new Animated.Value(0);
         this.height = 0;
@@ -79,9 +81,8 @@ class Select extends Component {
         }).start(() => {
             this.setState({
                 hideMarsk: !this.state.hideMarsk,
-                zIndex: this.state.zIndex == 5? 0 : 5
+                zIndex: this.state.zIndex == 5 ? 0 : 5,
             });
-          
         });
     };
 
@@ -201,14 +202,24 @@ class Select extends Component {
                 });
                 if (i < 3) {
                     //如果弹出框未弹出，则执行打开的动画
-                    this.range = [pt(254), 0 ];
+                    this.range = [pt(254), 0];
                     this.opacityRange = [1, 0];
-                    this.spin(index);
+                    this.spin();
                 }
                 break;
             }
         }
-        selectParams = {...this.state.selectParams, [key]: value};
+        if (index == 0) {
+            selectParams = {...this.state.selectParams};
+            delete selectParams[key];
+        } else {
+            selectParams = {...this.state.selectParams, [key]: value};
+        }
+
+        if (this.state.currentNavIndex != 3) {
+            this.props.getData(selectParams);
+        }
+
         //console.log(selectParams);
         //console.log(list)
 
@@ -297,20 +308,24 @@ class Select extends Component {
             );
         }
     }
+    getData() {}
 
     resetHandle() {
         //console.log(88);
         let list = this.state.choiseList;
+        let newSelectParams = this.state.selectParams
         list.forEach((rootItem, rootIndex) => {
             if (rootIndex > 2) {
                 rootItem.list.forEach((item, index) => {
-                    item.activeIndex = 0;
+                    item.activeIndex = 0
+                    delete newSelectParams[item.key]
                 });
             }
         });
         //console.log(list);
         this.setState({
             choiseList: list,
+            selectParams: newSelectParams
         });
     }
     marskComponent(that) {
@@ -325,45 +340,45 @@ class Select extends Component {
                         onPress={() => {
                             that.marskClickHandle();
                         }}
-                        style={{height: '100%', width: '100%',}}>
+                        style={{height: '100%', width: '100%'}}>
                         <View
                             style={{
                                 height: '100%',
                                 width: '100%',
-                            }}>
-                            <Text>777</Text>
-                        </View>
+                            }}></View>
                     </TouchableHighlight>
                 </View>
             );
         }
     }
 
-    searchFunc (params) {
-        let reset = {...this.props.that.requestParam, pageIndex: 1}
-        this.props.that.setState({
-            requestParam: reset
-        }, () => {
-            this.props.getData(this.props.that, params)
-        })
-        
+    confirmHandle() {
+        setTimeout(() => {
+            this.props.getData(this.state.selectParams);
+            //如果弹出框未弹出，则执行打开的动画
+            this.range = [pt(254), 0];
+            this.opacityRange = [1, 0];
+            this.spin();
+        },100);
     }
 
-    buttonComponent(that) {
+    buttonComponent() {
         if (this.state.currentNavIndex == 3) {
             return (
                 <View style={styles.bottomBtns}>
                     <Button
                         title="重置"
                         onPress={() => {
-                            that.resetHandle();
+                            this.resetHandle();
                         }}
                         buttonStyle={styles.resetBtn}
                         titleStyle={{color: '#333333'}}
                     />
                     <Button
                         title="确定"
-                        onPress={() => { this.searchFunc(this.props.that,{name:'万科'}) } }
+                        onPress={() => {
+                            this.confirmHandle();
+                        }}
                         buttonStyle={styles.confirmtBtn}
                     />
                 </View>
@@ -392,7 +407,12 @@ class Select extends Component {
         //console.log(this.props)
 
         return (
-            <View style={{ position: 'relative', width: pt(375-20), height: pt(46), }}>
+            <View
+                style={{
+                    position: 'relative',
+                    width: pt(375 - 20),
+                    height: pt(46),
+                }}>
                 <View style={styles.navWrapper}>
                     {navList.map((item, index) => {
                         return (
@@ -402,32 +422,47 @@ class Select extends Component {
                                     this.navClickHandle(index);
                                 }}
                                 key={index}>
-                                <View style={{ flexDirection: 'row',justifyContent: 'center',alignItems: 'center'}}>
-                                    <Text style={[styles.navWrapperText,{ color: (item.selected && item.selected !=item.title)? '#F04531' : '#333333' }]}>
+                                <View
+                                    style={{
+                                        flexDirection: 'row',
+                                        justifyContent: 'center',
+                                        alignItems: 'center',
+                                    }}>
+                                    <Text
+                                        style={[
+                                            styles.navWrapperText,
+                                            {
+                                                color:
+                                                    item.selected &&
+                                                    item.selected != item.title
+                                                        ? '#F04531'
+                                                        : '#333333',
+                                            },
+                                        ]}>
                                         {item.selected || item.title}
                                     </Text>
                                     <Svg
-                                        name={ (item.selected && item.selected !=item.title)? 'iconxiala_active' : 'iconxiala' }
+                                        name={
+                                            item.selected &&
+                                            item.selected != item.title
+                                                ? 'iconxiala_active'
+                                                : 'iconxiala'
+                                        }
                                         width={pt(24)}
-                                        height={pt(12)}>
-                                    </Svg>
+                                        height={pt(12)}></Svg>
                                 </View>
                             </TouchableHighlight>
                         );
                     })}
                 </View>
-                <Animated.View
-                    style={[
-                        styles.animate,
-                        {height: spin,},
-                    ]}>
+                <Animated.View style={[styles.animate, {height: spin}]}>
                     <View style={styles.selectArea}>
                         <ScrollView>
                             <View style={styles.selectContent}>
                                 {currentList.map((item, index) => {
                                     return this.showWhich(this, item, index);
                                 })}
-                                {this.buttonComponent(this)}
+                                {this.buttonComponent.bind(this)()}
                             </View>
                         </ScrollView>
                     </View>
@@ -435,17 +470,18 @@ class Select extends Component {
                 <Animated.View
                     style={[
                         styles.marsk,
-                        {opacity: opacity, height: screenHeight,zIndex: this.state.zIndex },
+                        {
+                            opacity: opacity,
+                            height: screenHeight,
+                            zIndex: this.state.zIndex,
+                        },
                     ]}>
                     {this.marskComponent(this)}
                 </Animated.View>
-
-                
             </View>
         );
     }
 }
-
 const styles = StyleSheet.create({
     navWrapper: {
         flexDirection: 'row',
@@ -461,7 +497,7 @@ const styles = StyleSheet.create({
         lineHeight: pt(44),
         fontWeight: 'bold',
         paddingLeft: pt(10),
-        marginRight: pt(-6)
+        marginRight: pt(-6),
     },
     animate: {
         zIndex: 100,
@@ -471,7 +507,7 @@ const styles = StyleSheet.create({
         width: '100%',
         backgroundColor: 'pink',
         position: 'absolute',
-        zIndex: 100
+        zIndex: 100,
     },
     selectContent: {
         paddingLeft: pt(20),
@@ -541,8 +577,8 @@ const styles = StyleSheet.create({
         width: '100%',
     },
     activeColor: {
-        color: '#F04531'
-    }
+        color: '#F04531',
+    },
 });
 
-export default Select
+export default connect((state) => ({listData: state.houseListData}))(Select);

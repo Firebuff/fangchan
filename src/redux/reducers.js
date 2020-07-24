@@ -1,4 +1,4 @@
-import { LOADMORE, CLEARHOUSELIST, SETPAGEINDEX, ISMORE,  CLEARLIST } from './action-type'
+import { LOADMORE, CLEARHOUSELIST, SETPAGEINDEX, ISMORE,  CLEARLIST, SETREQUESTPARAMS } from './action-type'
 import { combineReducers } from 'redux'
 
 
@@ -19,9 +19,6 @@ function houseListData (state = initHouseListData, action) {
 
         // 清空列表数据，清空搜索条件
         case CLEARHOUSELIST:
-            console.log(777)
-            console.log({...state, ...initHouseListData })
-
             return {...state, ...initHouseListData }
 
         // 设置当前请求数据的页数
@@ -32,9 +29,10 @@ function houseListData (state = initHouseListData, action) {
         // 是否加载更多
         case ISMORE: 
             return {...state, isMore: action.data}
-        // 清空列表
-        case  CLEARLIST: 
-            return {...state, list: []}
+        // 设置请求参数
+        case  SETREQUESTPARAMS: 
+            let questParams = {...state.requestParams,...action.data}
+            return {...state, requestParams: questParams}
 
         default: 
             return state

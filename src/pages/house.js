@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 
 import {View, Text, FlatList} from 'react-native';
 
-import {getHouseList} from '../api';
+import { getHouseList } from '../api';
 
 import HouseList from '../components/house/list';
 
@@ -15,56 +15,69 @@ import Loaing from '../components/loading';
 
 import Selects from '../components/select/index';
 
-import { loadHouseList, clearAll } from '../redux/actions'
+import { setMoreHouseList, setPageIndex, setIsMore, clearAll, setQuestParam } from '../redux/actions'
 
 import { connect } from 'react-redux'
-
-
-
 
 class House extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            listData: [],
-            requestParam: {
-                pageIndex: 1,
-            },
-            loadMore: true,
-            refreshing: false,
+            refreshing: true,
         };
     }
     componentDidMount() {
         this.getData()
     }
-
-    getData (refresh) {
-        let state =  this.props.houseListData
-        let params = {
-            requestParams: state.requestParams,
-            isMore: state.isMore, // 是否还有更多数据
-            refresh: refresh,
-            currentPageIndex: state.requestParams.pageIndex //当前页面
+    getData (params) {
+        let state = this.props.houseListData
+        let dispatch =  this.props.dispatch
+        if (!state.isMore) {
+            return
         }
-        this.props.loadHouseList(params)
+        getHouseList(state.requestParams).then ((res) => {
+            console.log(res)
+            this.setState({
+                refreshing: false
+            })
+            if (res.status == 1) {
+                dispatch(setMoreHouseList(res.data))
+                if (state.requestParams.pageIndex != res.pageAllIndex) {
+                    let newPage = state.requestParams.pageIndex + 1
+                    dispatch(setPageIndex(newPage))
+                } else {
+                    dispatch(setIsMore(false))
+                }
+                
+            }
+       })
     }
-
     loadMore () {
-        this.getData(false)
+        this.getData()
     }
+    refresh(params = null) {
+        this.setState({
+            refreshing: true
+        })
+        let dispatch =  this.props.dispatch
+        dispatch(clearAll())
 
-
-    refresh() {
-        this.getData(true)
+        console.log(params)
+        if (params) {
+            dispatch(setQuestParam(params))
+        }
+        setTimeout( () => {
+            //console.log(this.props.houseListData)
+            this.getData()
+        },300)
+        
     }
-
     renderItem(item) {
         return <HouseList {...item.item} key={ item.id }></HouseList>;
     }
 
     render() {
-        console.log(this.props)
-        let list = this.props.houseListData.list
+        let state = this.props.houseListData
         return (
             <View style={{height: '100%'}}>
                 <View
@@ -86,7 +99,7 @@ class House extends Component {
                             zIndex: 5,
                             top: 0,
                         }}>
-                        {/*<Selects that = {this} getData = {this.getData}></Selects>*/}
+                        <Selects that = {this} getData = {this.refresh.bind(this)}></Selects>
 
                         <FlatList
                             style={{
@@ -95,7 +108,7 @@ class House extends Component {
                                 paddingLeft: pt(15),
                                 paddingRight: pt(15),
                             }}
-                            data={list}
+                            data={ state.list }
                             renderItem={this.renderItem}
                             keyExtractor={(item, index) => index.toString()}
                             onEndReachedThreshold={0.01}
@@ -105,10 +118,10 @@ class House extends Component {
                             numColumns={1}
                             refreshing={this.state.refreshing}
                             initialNumToRender={5}
-                            //ListEmptyComponent = { () => { return <Text>77</Text>} }
+                            ListEmptyComponent = { this.state.refreshing? null : <Text>暂无数据</Text> }
                             progressViewOffset={10}
                             ListFooterComponent={
-                                <Loaing finished={this.state.loadMore}></Loaing>
+                                state.requestParams.pageIndex ==1? null : <Loaing finished={state.isMore}></Loaing>
                             }
                             onRefresh={() => {
                                 this.refresh();
@@ -121,6 +134,4 @@ class House extends Component {
     }
 }
 
-
-
-export default  connect((state) => ({houseListData: state.houseListData}), {loadHouseList}) (House)         
+export default  connect((state) => ({houseListData: state.houseListData})) (House)         

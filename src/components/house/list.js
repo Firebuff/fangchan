@@ -29,7 +29,7 @@ const HouseList = (props) => {
                     <Text style={ styles.tag }>普通住宅</Text>
                 </View>
                 <View  style={ [styles.tagList,{alignItems: 'baseline'}] }>
-                    <Text  style={ styles.price }>17500</Text>
+                    <Text  style={ styles.price }>{ props.dj }</Text>
                     <Text  style={ styles.unit }>元/m²</Text>
                     <Text  style={ styles.size }>建面98-157m²</Text>
                 </View>
