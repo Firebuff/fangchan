@@ -1,7 +1,7 @@
 import { get } from './methods'
 
 export const getHouseList = (params) => {
-    console.log(params)
+    // console.log(params)
     return get('webapp/houseslist', params)
 }
 

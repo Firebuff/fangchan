@@ -210,8 +210,7 @@ class Select extends Component {
             }
         }
         if (index == 0) {
-            selectParams = {...this.state.selectParams};
-            delete selectParams[key];
+            selectParams = {...this.state.selectParams, [key]: ''};
         } else {
             selectParams = {...this.state.selectParams, [key]: value};
         }
@@ -237,6 +236,7 @@ class Select extends Component {
             return (
                 <TouchableHighlight
                     underlayColor="rgba(0,0,0,0)"
+                    key={index}
                     onPress={() => {
                         that.itemSelecthandle(
                             index,
@@ -262,7 +262,7 @@ class Select extends Component {
             );
         } else {
             return (
-                <View style={styles.listWrapper}>
+                <View style={styles.listWrapper} key={index}>
                     <View>
                         <Text style={styles.listTitle}>{item.title}</Text>
                     </View>
@@ -308,8 +308,9 @@ class Select extends Component {
             );
         }
     }
-    getData() {}
 
+
+    //重置
     resetHandle() {
         //console.log(88);
         let list = this.state.choiseList;
@@ -318,7 +319,7 @@ class Select extends Component {
             if (rootIndex > 2) {
                 rootItem.list.forEach((item, index) => {
                     item.activeIndex = 0
-                    delete newSelectParams[item.key]
+                    newSelectParams[item.key] = ''
                 });
             }
         });
@@ -505,7 +506,7 @@ const styles = StyleSheet.create({
     selectArea: {
         height: '100%',
         width: '100%',
-        backgroundColor: 'pink',
+        backgroundColor: '#fff',
         position: 'absolute',
         zIndex: 100,
     },
