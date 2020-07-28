@@ -32,7 +32,7 @@ const styles = StyleSheet.create({
     titleWrapper: {
         flexDirection: 'row',
         justifyContent: 'space-between',
-        height: pt(44),
+        height: pt(50),
         alignItems: 'center',
         width: '100%',
     },

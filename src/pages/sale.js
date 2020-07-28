@@ -12,16 +12,43 @@ import Svg from '../components/svg';
 
 import DetailTitle from '../components/detail-title';
 
+import {MapView, MapTypes, Geolocation, Overlay} from 'react-native-baidu-map';
+
+const {Marker} = Overlay;
+
 class HouseDetail extends React.Component {
     constructor(props) {
         super(props);
         this.state = {};
     }
     render() {
-        let img = 'https://house.08cms.com/thumb/uploads/house/000/00/00/1/000/002/00ab7d1f20cfbc8a724dcd49b557bae7.jpg'
+        let img =
+            'https://house.08cms.com/thumb/uploads/house/000/00/00/1/000/002/00ab7d1f20cfbc8a724dcd49b557bae7.jpg';
         return (
-            <ScrollView>
+            <ScrollView scrollEnabled={false}>
                 <View style={styles.container}>
+                    <View style={{marginBottom: pt(50)}}>
+                        <MapView
+                            width={pt(375)}
+                            height={pt(500)}
+                            zoom={18}
+                            trafficEnabled={true}
+                            zoomControlsVisible={true}
+                            showsUserLocation={true}
+                            scrollGesturesEnabled={true}
+                            center={{
+                                longitude: 113.75,
+                                latitude: 23.05,
+                            }}>
+                            <Marker
+                                title="中心"
+                                location={{
+                                    longitude: 116.465175,
+                                    latitude: 39.938522,
+                                }}
+                            />
+                        </MapView>
+                    </View>
                     <View style={styles.swiper}></View>
                     <View style={styles.mainInfo}>
                         <Text style={styles.mainInfoTitle}>
@@ -114,12 +141,40 @@ class HouseDetail extends React.Component {
                                     }}
                                 />
                                 <View style={styles.houseStatusText}>
-                                    <Text style={{width: '100%'}}>
-                                        万科首铸翡翠东望尾盘在售库存仅剩少万科首铸翡翠东望尾盘在售库存仅剩少
-                                       
+                                    <Text style={styles.statusItemTitle}>
+                                        万科首铸翡翠东望尾盘在售库万科首铸翡翠东望尾盘在售库
                                     </Text>
-                                    <Text>
-                                        刘青峰  2020.04.24
+                                    <Text style={styles.statusItemSubText}>
+                                        刘青峰 2020.04.24
+                                    </Text>
+                                </View>
+                            </View>
+                        </View>
+                    </View>
+                    <View style={styles.houseType}>
+                        <DetailTitle
+                            name={'户型介绍(5)'}
+                            iconName={'查看更多'}></DetailTitle>
+                        <View style={styles.houseTypeList}>
+                            <View style={styles.houseTypeItem}>
+                                <Image
+                                    style={styles.houseTypeImg}
+                                    resizeMode="cover"
+                                    source={{
+                                        uri: img,
+                                    }}
+                                />
+                                <View style={styles.houseTypeTitleWrapper}>
+                                    <Text style={styles.houseTypeTitle}>
+                                        4室2厅2卫1厨
+                                    </Text>
+                                    <Text style={styles.houseTypeTag}>
+                                        在售
+                                    </Text>
+                                </View>
+                                <View>
+                                    <Text style={styles.houseTypeSize}>
+                                        建面约123m²
                                     </Text>
                                 </View>
                             </View>
@@ -209,22 +264,64 @@ const styles = StyleSheet.create({
     houseStatusImg: {
         height: pt(80),
         width: pt(104),
-        borderRadius: pt(4)
+        borderRadius: pt(4),
+        marginRight: pt(15),
     },
     houseStatusListItem: {
         flexDirection: 'row',
-        justifyContent: 'center',
-        width: pt(375-30)
+        paddingBottom: pt(15),
     },
     houseStatusText: {
+        flex: 1,
         justifyContent: 'space-between',
-        marginLeft: pt(15),
-        width: pt(375-30-15)
     },
-    houseStatusList: {
+    statusItemTitle: {
+        fontSize: pt(14),
+        width: pt(375 - 104 - 30),
+        color: '#333333',
+        fontWeight: 'bold',
+    },
+    statusItemSubText: {
+        fontSize: pt(12),
+        color: '#DDE3EF',
+    },
+    houseType: {
         paddingLeft: pt(15),
         paddingRight: pt(15),
-    }
+        backgroundColor: '#fff',
+        marginTop: pt(12),
+        paddingBottom: pt(20),
+    },
+    houseTypeImg: {
+        width: pt(105),
+        height: pt(105),
+        borderRadius: pt(4),
+    },
+    houseTypeTitleWrapper: {
+        flexDirection: 'row',
+        marginTop: pt(10),
+    },
+    houseTypeTitle: {
+        fontSize: pt(12),
+        color: '#333333',
+        marginRight: pt(4),
+    },
+    houseTypeTag: {
+        backgroundColor: '#FEF0EF',
+        fontSize: pt(10),
+        color: '#F36D61',
+        alignSelf: 'center',
+        paddingBottom: pt(1),
+        paddingTop: pt(1),
+        paddingLeft: pt(2),
+        paddingRight: pt(2),
+        borderRadius: pt(2),
+    },
+    houseTypeSize: {
+        color: '#999999',
+        fontSize: pt(10),
+        marginTop: pt(5),
+    },
 });
 
 export default HouseDetail;
