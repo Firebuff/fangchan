@@ -1,6 +1,13 @@
 import React from 'react';
 
-import {View, Text, StyleSheet, ScrollView, Image} from 'react-native';
+import {
+    View,
+    Text,
+    StyleSheet,
+    ScrollView,
+    Image,
+    TouchableWithoutFeedback,
+} from 'react-native';
 
 import pt from '../utils/px2dp/Px2dp';
 
@@ -8,48 +15,37 @@ import LineText from '../components/line-text';
 
 import GetMoreButton from '../components/get-more-button';
 
+import Swipers from '../components/swiper';
+
 import Svg from '../components/svg';
 
 import DetailTitle from '../components/detail-title';
 
 import {MapView, MapTypes, Geolocation, Overlay} from 'react-native-baidu-map';
 
+
+
+
+
+
 const {Marker} = Overlay;
 
 class HouseDetail extends React.Component {
     constructor(props) {
         super(props);
-        this.state = {};
+        this.state = {
+            canScroll: true,
+        };
     }
     render() {
         let img =
             'https://house.08cms.com/thumb/uploads/house/000/00/00/1/000/002/00ab7d1f20cfbc8a724dcd49b557bae7.jpg';
         return (
-            <ScrollView scrollEnabled={false}>
+            <ScrollView scrollEnabled={this.state.canScroll}>
                 <View style={styles.container}>
-                    <View style={{marginBottom: pt(50)}}>
-                        <MapView
-                            width={pt(375)}
-                            height={pt(500)}
-                            zoom={18}
-                            trafficEnabled={true}
-                            zoomControlsVisible={true}
-                            showsUserLocation={true}
-                            scrollGesturesEnabled={true}
-                            center={{
-                                longitude: 113.75,
-                                latitude: 23.05,
-                            }}>
-                            <Marker
-                                title="中心"
-                                location={{
-                                    longitude: 116.465175,
-                                    latitude: 39.938522,
-                                }}
-                            />
-                        </MapView>
+                    <View style={styles.swiper}>
+                        <Swipers></Swipers>
                     </View>
-                    <View style={styles.swiper}></View>
                     <View style={styles.mainInfo}>
                         <Text style={styles.mainInfoTitle}>
                             新希望华鸿中梁瑞祥天樾
@@ -179,6 +175,36 @@ class HouseDetail extends React.Component {
                                 </View>
                             </View>
                         </View>
+                    </View>
+                    <View style={styles.mapField}>
+                        <DetailTitle
+                            name={'位置周边'}
+                            iconName={'查看更多'}></DetailTitle>
+                        <MapView
+                            width={pt(375 - 30)}
+                            height={pt(200)}
+                            zoom={18}
+                            trafficEnabled={true}
+                            zoomControlsVisible={true}
+                            showsUserLocation={true}
+                            scrollGesturesEnabled={true}
+                            center={{
+                                longitude: 113.75,
+                                latitude: 23.05,
+                            }}>
+                            <Marker
+                                title="中心"
+                                location={{
+                                    longitude: 116.465175,
+                                    latitude: 39.938522,
+                                }}
+                            />
+                        </MapView>
+                    </View>
+                    <View style={styles.moreHouses}>
+                        <DetailTitle
+                            name={'猜你喜欢'}
+                            iconName={'查看更多'}></DetailTitle>
                     </View>
                 </View>
             </ScrollView>
@@ -321,6 +347,20 @@ const styles = StyleSheet.create({
         color: '#999999',
         fontSize: pt(10),
         marginTop: pt(5),
+    },
+    mapField: {
+        paddingLeft: pt(15),
+        paddingRight: pt(15),
+        backgroundColor: '#fff',
+        marginTop: pt(12),
+        paddingBottom: pt(20),
+    },
+    moreHouses: {
+        paddingLeft: pt(15),
+        paddingRight: pt(15),
+        backgroundColor: '#fff',
+        marginTop: pt(12),
+        paddingBottom: pt(20),
     },
 });
 
