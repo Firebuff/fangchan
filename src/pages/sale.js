@@ -7,6 +7,10 @@ import {
     ScrollView,
     Image,
     TouchableWithoutFeedback,
+    Dimensions,
+    TouchableOpacity,
+    Linking,
+    Alert,
 } from 'react-native';
 
 import pt from '../utils/px2dp/Px2dp';
@@ -23,10 +27,7 @@ import DetailTitle from '../components/detail-title';
 
 import {MapView, MapTypes, Geolocation, Overlay} from 'react-native-baidu-map';
 
-
-
-
-
+import {Button} from 'react-native-elements';
 
 const {Marker} = Overlay;
 
@@ -37,177 +38,237 @@ class HouseDetail extends React.Component {
             canScroll: true,
         };
     }
+    callPhone = (phone) => {
+        const url = `tel:${phone}`;
+        Linking.canOpenURL(url)
+            .then((supported) => {
+                if (!supported) {
+                    return Alert.alert(
+                        '提示',
+                        `您的设备不支持该功能，请手动拨打 ${phone}`,
+                        [{text: '确定'}],
+                    );
+                }
+                return Linking.openURL(url);
+            })
+            .catch((err) => Toast.info(`出错了：${err}`, 1.5));
+    };
     render() {
         let img =
             'https://house.08cms.com/thumb/uploads/house/000/00/00/1/000/002/00ab7d1f20cfbc8a724dcd49b557bae7.jpg';
+        let picList = [
+            {
+                thumb: `https://house.08cms.com/thumb/uploads/house/000/00/00/1/000/002/390d87cc5e91f4450a46103e340f4eec.jpg`,
+                type: 'picture',
+            },
+            {
+                thumb: `https://house.08cms.com/thumb/uploads/house/000/00/00/1/000/002/390d87cc5e91f4450a46103e340f4eec.jpg`,
+                type: 'picture',
+            },
+        ];
+        let videoList = [
+            {
+                src:
+                    'http://vfx.mtime.cn/Video/2019/02/04/mp4/190204084208765161.mp4',
+                type: 'video',
+                poster:
+                    'https://house.08cms.com/thumb/uploads/house/000/00/00/1/000/002/390d87cc5e91f4450a46103e340f4eec.jpg',
+            },
+            {
+                src:
+                    'http://vfx.mtime.cn/Video/2019/03/21/mp4/190321153853126488.mp4',
+                type: 'video',
+                poster:
+                    'https://house.08cms.com/thumb/uploads/house/000/00/00/1/000/002/390d87cc5e91f4450a46103e340f4eec.jpg',
+            },
+        ];
         return (
-            <ScrollView scrollEnabled={this.state.canScroll}>
-                <View style={styles.container}>
-                    <View style={styles.swiper}>
-                        <Swipers></Swipers>
-                    </View>
-                    <View style={styles.mainInfo}>
-                        <Text style={styles.mainInfoTitle}>
-                            新希望华鸿中梁瑞祥天樾
-                        </Text>
-                        <View style={styles.priceField}>
-                            <View style={styles.priceFieldItem}>
-                                <View style={styles.price}>
-                                    <Text style={styles.priceNumber}>
-                                        32000
+            <View style={{paddingBottom: pt(60)}}>
+                <ScrollView>
+                    <View style={styles.container}>
+                        <View style={styles.swiper}>
+                            <Swipers
+                                pictureList={picList}
+                                videoList={videoList}></Swipers>
+                        </View>
+                        <View style={styles.mainInfo}>
+                            <Text style={styles.mainInfoTitle}>
+                                新希望华鸿中梁瑞祥天樾
+                            </Text>
+                            <View style={styles.priceField}>
+                                <View style={styles.priceFieldItem}>
+                                    <View style={styles.price}>
+                                        <Text style={styles.priceNumber}>
+                                            32000
+                                        </Text>
+                                        <Text style={styles.priceUnit}>
+                                            元/m²
+                                        </Text>
+                                    </View>
+                                    <Text style={styles.priceFieldItemName}>
+                                        参考价格
                                     </Text>
-                                    <Text style={styles.priceUnit}>元/m²</Text>
                                 </View>
-                                <Text style={styles.priceFieldItemName}>
-                                    参考价格
-                                </Text>
-                            </View>
-                            <View style={styles.priceFieldItem}>
-                                <View style={styles.price}>
-                                    <Text style={styles.priceNumber}>
-                                        32000
+                                <View style={styles.priceFieldItem}>
+                                    <View style={styles.price}>
+                                        <Text style={styles.priceNumber}>
+                                            32000
+                                        </Text>
+                                        <Text style={styles.priceUnit}>m²</Text>
+                                    </View>
+                                    <Text style={styles.priceFieldItemName}>
+                                        建筑面积
                                     </Text>
-                                    <Text style={styles.priceUnit}>m²</Text>
                                 </View>
-                                <Text style={styles.priceFieldItemName}>
-                                    建筑面积
-                                </Text>
+                            </View>
+                            <View style={styles.infoList}>
+                                <View style={styles.infoListItem}>
+                                    <LineText
+                                        name={'开发商'}
+                                        value={
+                                            '东莞市首铸二号房地产有限公司'
+                                        }></LineText>
+                                </View>
+                                <View style={styles.infoListItem}>
+                                    <LineText
+                                        name={'主推户型'}
+                                        value={
+                                            '98m²三房 | 123m²四房'
+                                        }></LineText>
+                                </View>
+                                <View style={styles.infoListItem}>
+                                    <LineText
+                                        name={'开盘时间'}
+                                        value={'2020.06.26'}></LineText>
+                                </View>
+                                <View style={styles.infoListItem}>
+                                    <LineText
+                                        name={'楼盘地址'}
+                                        value={
+                                            '东莞市南城区建设路与运河东三路交汇处'
+                                        }></LineText>
+                                </View>
+                            </View>
+                            <GetMoreButton
+                                name={'查看更多楼盘信息'}></GetMoreButton>
+                            <View style={styles.infoBottomBtnWrapper}>
+                                <View style={styles.infoBottomBtn}>
+                                    <Svg
+                                        name={'iconkaipan'}
+                                        width={pt(20)}
+                                        height={pt(20)}></Svg>
+                                    <Text style={styles.infoBottomBtnName}>
+                                        开盘提醒
+                                    </Text>
+                                </View>
+                                <View style={styles.infoBottomBtn}>
+                                    <Svg
+                                        name={'iconpricedecrease'}
+                                        width={pt(20)}
+                                        height={pt(20)}></Svg>
+                                    <Text style={styles.infoBottomBtnName}>
+                                        开盘提醒
+                                    </Text>
+                                </View>
                             </View>
                         </View>
-                        <View style={styles.infoList}>
-                            <View style={styles.infoListItem}>
-                                <LineText
-                                    name={'开发商'}
-                                    value={
-                                        '东莞市首铸二号房地产有限公司'
-                                    }></LineText>
-                            </View>
-                            <View style={styles.infoListItem}>
-                                <LineText
-                                    name={'主推户型'}
-                                    value={'98m²三房 | 123m²四房'}></LineText>
-                            </View>
-                            <View style={styles.infoListItem}>
-                                <LineText
-                                    name={'开盘时间'}
-                                    value={'2020.06.26'}></LineText>
-                            </View>
-                            <View style={styles.infoListItem}>
-                                <LineText
-                                    name={'楼盘地址'}
-                                    value={
-                                        '东莞市南城区建设路与运河东三路交汇处'
-                                    }></LineText>
+                        <View style={styles.houseStatus}>
+                            <DetailTitle
+                                name={'楼盘动态(26)'}
+                                iconName={'查看更多'}></DetailTitle>
+                            <View style={styles.houseStatusList}>
+                                <View style={styles.houseStatusListItem}>
+                                    <Image
+                                        style={styles.houseStatusImg}
+                                        resizeMode="cover"
+                                        source={{
+                                            uri: img,
+                                        }}
+                                    />
+                                    <View style={styles.houseStatusText}>
+                                        <Text style={styles.statusItemTitle}>
+                                            万科首铸翡翠东望尾盘在售库万科首铸翡翠东望尾盘在售库
+                                        </Text>
+                                        <Text style={styles.statusItemSubText}>
+                                            刘青峰 2020.04.24
+                                        </Text>
+                                    </View>
+                                </View>
                             </View>
                         </View>
-                        <GetMoreButton
-                            name={'查看更多楼盘信息'}></GetMoreButton>
-                        <View style={styles.infoBottomBtnWrapper}>
-                            <View style={styles.infoBottomBtn}>
-                                <Svg
-                                    name={'iconkaipan'}
-                                    width={pt(20)}
-                                    height={pt(20)}></Svg>
-                                <Text style={styles.infoBottomBtnName}>
-                                    开盘提醒
-                                </Text>
-                            </View>
-                            <View style={styles.infoBottomBtn}>
-                                <Svg
-                                    name={'iconpricedecrease'}
-                                    width={pt(20)}
-                                    height={pt(20)}></Svg>
-                                <Text style={styles.infoBottomBtnName}>
-                                    开盘提醒
-                                </Text>
+                        <View style={styles.houseType}>
+                            <DetailTitle
+                                name={'户型介绍(5)'}
+                                iconName={'查看更多'}></DetailTitle>
+                            <View style={styles.houseTypeList}>
+                                <View style={styles.houseTypeItem}>
+                                    <Image
+                                        style={styles.houseTypeImg}
+                                        resizeMode="cover"
+                                        source={{
+                                            uri: img,
+                                        }}
+                                    />
+                                    <View style={styles.houseTypeTitleWrapper}>
+                                        <Text style={styles.houseTypeTitle}>
+                                            4室2厅2卫1厨
+                                        </Text>
+                                        <Text style={styles.houseTypeTag}>
+                                            在售
+                                        </Text>
+                                    </View>
+                                    <View>
+                                        <Text style={styles.houseTypeSize}>
+                                            建面约123m²
+                                        </Text>
+                                    </View>
+                                </View>
                             </View>
                         </View>
-                    </View>
-                    <View style={styles.houseStatus}>
-                        <DetailTitle
-                            name={'楼盘动态(26)'}
-                            iconName={'查看更多'}></DetailTitle>
-                        <View style={styles.houseStatusList}>
-                            <View style={styles.houseStatusListItem}>
-                                <Image
-                                    style={styles.houseStatusImg}
-                                    resizeMode="cover"
-                                    source={{
-                                        uri: img,
+                        <View style={styles.mapField}>
+                            <DetailTitle
+                                name={'位置周边'}
+                                iconName={'查看更多'}></DetailTitle>
+                            <MapView
+                                width={pt(375 - 30)}
+                                height={pt(200)}
+                                zoom={18}
+                                trafficEnabled={true}
+                                zoomControlsVisible={true}
+                                showsUserLocation={true}
+                                scrollGesturesEnabled={true}
+                                center={{
+                                    longitude: 113.75,
+                                    latitude: 23.05,
+                                }}>
+                                <Marker
+                                    title="中心"
+                                    location={{
+                                        longitude: 116.465175,
+                                        latitude: 39.938522,
                                     }}
                                 />
-                                <View style={styles.houseStatusText}>
-                                    <Text style={styles.statusItemTitle}>
-                                        万科首铸翡翠东望尾盘在售库万科首铸翡翠东望尾盘在售库
-                                    </Text>
-                                    <Text style={styles.statusItemSubText}>
-                                        刘青峰 2020.04.24
-                                    </Text>
-                                </View>
-                            </View>
+                            </MapView>
+                        </View>
+                        <View style={styles.moreHouses}>
+                            <DetailTitle
+                                name={'猜你喜欢'}
+                                iconName={'查看更多'}></DetailTitle>
                         </View>
                     </View>
-                    <View style={styles.houseType}>
-                        <DetailTitle
-                            name={'户型介绍(5)'}
-                            iconName={'查看更多'}></DetailTitle>
-                        <View style={styles.houseTypeList}>
-                            <View style={styles.houseTypeItem}>
-                                <Image
-                                    style={styles.houseTypeImg}
-                                    resizeMode="cover"
-                                    source={{
-                                        uri: img,
-                                    }}
-                                />
-                                <View style={styles.houseTypeTitleWrapper}>
-                                    <Text style={styles.houseTypeTitle}>
-                                        4室2厅2卫1厨
-                                    </Text>
-                                    <Text style={styles.houseTypeTag}>
-                                        在售
-                                    </Text>
-                                </View>
-                                <View>
-                                    <Text style={styles.houseTypeSize}>
-                                        建面约123m²
-                                    </Text>
-                                </View>
-                            </View>
-                        </View>
-                    </View>
-                    <View style={styles.mapField}>
-                        <DetailTitle
-                            name={'位置周边'}
-                            iconName={'查看更多'}></DetailTitle>
-                        <MapView
-                            width={pt(375 - 30)}
-                            height={pt(200)}
-                            zoom={18}
-                            trafficEnabled={true}
-                            zoomControlsVisible={true}
-                            showsUserLocation={true}
-                            scrollGesturesEnabled={true}
-                            center={{
-                                longitude: 113.75,
-                                latitude: 23.05,
-                            }}>
-                            <Marker
-                                title="中心"
-                                location={{
-                                    longitude: 116.465175,
-                                    latitude: 39.938522,
-                                }}
-                            />
-                        </MapView>
-                    </View>
-                    <View style={styles.moreHouses}>
-                        <DetailTitle
-                            name={'猜你喜欢'}
-                            iconName={'查看更多'}></DetailTitle>
-                    </View>
+                </ScrollView>
+                <View style={styles.bottomBtns}>
+                    <TouchableOpacity style={styles.callPhone}
+                        onPress={
+                            () => {
+                                this.callPhone(18038253636)
+                            }
+                        }
+                    >
+                        <Text style={styles.phoneText}>打电话</Text>
+                    </TouchableOpacity>
                 </View>
-            </ScrollView>
+            </View>
         );
     }
 }
@@ -219,7 +280,7 @@ const styles = StyleSheet.create({
     swiper: {
         width: '100%',
         height: pt(250),
-        backgroundColor: 'pink',
+        //backgroundColor: 'pink',
     },
     mainInfo: {
         paddingLeft: pt(15),
@@ -361,6 +422,28 @@ const styles = StyleSheet.create({
         backgroundColor: '#fff',
         marginTop: pt(12),
         paddingBottom: pt(20),
+    },
+    bottomBtns: {
+        width: pt(375),
+        height: pt(50),
+        backgroundColor: '#fff',
+        position: 'absolute',
+        bottom: 0,
+        left: 0,
+        flexDirection: 'row',
+        justifyContent: 'flex-end',
+    },
+    callPhone: {
+        width: pt(130),
+        height: pt(50),
+        lineHeight: pt(50),
+        justifyContent: 'center',
+        backgroundColor: '#F04531',
+        alignItems: 'center',
+    },
+    phoneText: {
+        color: '#fff',
+        fontSize: pt(18),
     },
 });
 

@@ -27,7 +27,13 @@ class House extends Component {
         };
     }
     componentDidMount() {
-        this.getData()
+        let dispatch =  this.props.dispatch
+        // 将list数据设置为[]
+        dispatch(clearAll())
+        
+        setTimeout( () => {
+            this.getData()
+        },300)
     }
     getData (params) {
         let state = this.props.houseListData
