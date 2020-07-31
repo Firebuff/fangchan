@@ -29,6 +29,8 @@ import {MapView, MapTypes, Geolocation, Overlay} from 'react-native-baidu-map';
 
 import {Button} from 'react-native-elements';
 
+import Spinkiter from 'react-native-spinkit';
+
 const {Marker} = Overlay;
 
 class HouseDetail extends React.Component {
@@ -231,7 +233,7 @@ class HouseDetail extends React.Component {
                                 iconName={'查看更多'}></DetailTitle>
                             <MapView
                                 width={pt(375 - 30)}
-                                height={pt(200)}
+                                height={pt(300)}
                                 zoom={18}
                                 trafficEnabled={true}
                                 zoomControlsVisible={true}
@@ -242,11 +244,11 @@ class HouseDetail extends React.Component {
                                     latitude: 23.05,
                                 }}>
                                 <Marker
-                                    title="中心"
                                     location={{
-                                        longitude: 116.465175,
-                                        latitude: 39.938522,
+                                        longitude: 113.75,
+                                        latitude: 23.05,
                                     }}
+                                    icon={ require('../static/images/img/marker.png')}
                                 />
                             </MapView>
                         </View>
@@ -264,7 +266,7 @@ class HouseDetail extends React.Component {
                                 this.callPhone(18038253636)
                             }
                         }
-                    >
+                    >   
                         <Text style={styles.phoneText}>打电话</Text>
                     </TouchableOpacity>
                 </View>
