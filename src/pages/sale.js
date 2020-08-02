@@ -31,14 +31,22 @@ import {Button} from 'react-native-elements';
 
 import Spinkiter from 'react-native-spinkit';
 
+import { getHouseDetail } from '../api'
+
+
 const {Marker} = Overlay;
+
+const screenHeight = Dimensions.get('window').height;
 
 class HouseDetail extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
             canScroll: true,
-        };
+            loading: true,
+            resData: {},
+            houseInfo: {}
+        }
     }
     callPhone = (phone) => {
         const url = `tel:${phone}`;
@@ -55,6 +63,51 @@ class HouseDetail extends React.Component {
             })
             .catch((err) => Toast.info(`出错了：${err}`, 1.5));
     };
+
+    loading() {
+        return (
+            <View
+                style={{
+                    position: 'absolute',
+                    height: screenHeight,
+                    width: pt(375),
+                    top: 0,
+                    left: 0,
+                    backgroundColor: '#fff',
+                    justifyContent: 'space-around',
+                }}>
+                <Spinkiter
+                    type={'FadingCircleAlt'}
+                    color={'#F04531'}
+                    size={pt(40)}
+                    style={{alignSelf: 'center', flex: 1}}
+                />
+                <View style={{height: '40%'}}></View>
+            </View>
+        )
+    }
+
+    componentDidMount() {
+        getHouseDetail({id: 4634}).then ((res) => {
+            if (res.status == 1) {
+
+                let newRes = {...res}
+
+                newRes.lphdp.length && newRes.lphdp.forEach(element => {
+                    element.type = 'picture'
+                });
+                this.setState({
+                    loading: false,
+                    resData: newRes,
+                    houseInfo: newRes.data[0]
+                }, () => {
+                    console.log(this.state.resData)
+                })
+                
+            }
+        })
+    }
+
     render() {
         let img =
             'https://house.08cms.com/thumb/uploads/house/000/00/00/1/000/002/00ab7d1f20cfbc8a724dcd49b557bae7.jpg';
@@ -84,24 +137,27 @@ class HouseDetail extends React.Component {
                     'https://house.08cms.com/thumb/uploads/house/000/00/00/1/000/002/390d87cc5e91f4450a46103e340f4eec.jpg',
             },
         ];
+
+        let houseInfo = this.state.houseInfo || {}
         return (
             <View style={{paddingBottom: pt(60)}}>
                 <ScrollView>
                     <View style={styles.container}>
                         <View style={styles.swiper}>
-                            <Swipers
-                                pictureList={picList}
-                                videoList={videoList}></Swipers>
+                           {
+                               this.state.resData && this.state.resData.lphdp && this.state.resData.lphdp.length &&<Swipers
+                                pictureList={this.state.resData.lphdp}></Swipers>
+                           }
                         </View>
                         <View style={styles.mainInfo}>
                             <Text style={styles.mainInfoTitle}>
-                                新希望华鸿中梁瑞祥天樾
+                               { houseInfo && houseInfo.name || '暂无资料'}
                             </Text>
                             <View style={styles.priceField}>
                                 <View style={styles.priceFieldItem}>
                                     <View style={styles.price}>
                                         <Text style={styles.priceNumber}>
-                                            32000
+                                        { houseInfo && houseInfo.dj && Number(houseInfo.dj) || '暂无资料'}
                                         </Text>
                                         <Text style={styles.priceUnit}>
                                             元/m²
@@ -114,7 +170,7 @@ class HouseDetail extends React.Component {
                                 <View style={styles.priceFieldItem}>
                                     <View style={styles.price}>
                                         <Text style={styles.priceNumber}>
-                                            32000
+                                        { houseInfo && houseInfo.jzmj && houseInfo.jzmj.toString().replace(/m²/g, '') || '暂无资料'}
                                         </Text>
                                         <Text style={styles.priceUnit}>m²</Text>
                                     </View>
@@ -126,10 +182,10 @@ class HouseDetail extends React.Component {
                             <View style={styles.infoList}>
                                 <View style={styles.infoListItem}>
                                     <LineText
-                                        name={'开发商'}
-                                        value={
-                                            '东莞市首铸二号房地产有限公司'
-                                        }></LineText>
+                                        name={'开发商'} 
+                                        value={ houseInfo && houseInfo.house_developer || '暂无资料'}
+                                    >
+                                        </LineText>
                                 </View>
                                 <View style={styles.infoListItem}>
                                     <LineText
@@ -141,14 +197,16 @@ class HouseDetail extends React.Component {
                                 <View style={styles.infoListItem}>
                                     <LineText
                                         name={'开盘时间'}
-                                        value={'2020.06.26'}></LineText>
+                                        value={ houseInfo && houseInfo.kpdate || '暂无资料'}
+                                        >
+
+                                        </LineText>
                                 </View>
                                 <View style={styles.infoListItem}>
                                     <LineText
                                         name={'楼盘地址'}
-                                        value={
-                                            '东莞市南城区建设路与运河东三路交汇处'
-                                        }></LineText>
+                                        value={ houseInfo && houseInfo.address || '暂无资料'}
+                                        ></LineText>
                                 </View>
                             </View>
                             <GetMoreButton
@@ -233,7 +291,7 @@ class HouseDetail extends React.Component {
                                 iconName={'查看更多'}></DetailTitle>
                             <MapView
                                 width={pt(375 - 30)}
-                                height={pt(300)}
+                                height={pt(200)}
                                 zoom={18}
                                 trafficEnabled={true}
                                 zoomControlsVisible={true}
@@ -248,7 +306,7 @@ class HouseDetail extends React.Component {
                                         longitude: 113.75,
                                         latitude: 23.05,
                                     }}
-                                    icon={ require('../static/images/img/marker.png')}
+                                    icon={require('../static/images/img/marker.png')}
                                 />
                             </MapView>
                         </View>
@@ -260,16 +318,17 @@ class HouseDetail extends React.Component {
                     </View>
                 </ScrollView>
                 <View style={styles.bottomBtns}>
-                    <TouchableOpacity style={styles.callPhone}
-                        onPress={
-                            () => {
-                                this.callPhone(18038253636)
-                            }
-                        }
-                    >   
+                    <TouchableOpacity
+                        style={styles.callPhone}
+                        onPress={() => {
+                            this.callPhone(18038253636);
+                        }}>
                         <Text style={styles.phoneText}>打电话</Text>
                     </TouchableOpacity>
                 </View>
+                {
+                    this.state.loading? this.loading() : null
+                }
             </View>
         );
     }

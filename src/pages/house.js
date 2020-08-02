@@ -11,8 +11,6 @@ import {Card} from 'react-native-shadow-cards';
 
 import pt from '../utils/px2dp/Px2dp';
 
-import Loaing from '../components/loading';
-
 import Selects from '../components/select/index';
 
 import {
@@ -145,7 +143,6 @@ class House extends Component {
                 <Text  style={{fontSize: pt(12),alignSelf: 'center',marginLeft: pt(5),color:'#919AAA'}}>没有更多了</Text>
             )
         }
-        //state.requestParams.pageIndex ==1? null : <Loaing finished={state.isMore}></Loaing>
     }
 
     render() {
