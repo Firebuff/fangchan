@@ -119,7 +119,7 @@ class House extends Component {
         }, 300);
     }
     renderItem(item) {
-        return <HouseList {...item.item} key={item.id}></HouseList>;
+        return <HouseList {...item.item} key={item.id} navigation={this.props.navigation}></HouseList>;
     }
 
     footerComponent() {
@@ -180,7 +180,7 @@ class House extends Component {
                                 paddingRight: pt(15),
                             }}
                             data={state.list}
-                            renderItem={this.renderItem}
+                            renderItem={this.renderItem.bind(this)}
                             keyExtractor={(item, index) => index.toString()}
                             onEndReachedThreshold={0.01}
                             onEndReached={() => {

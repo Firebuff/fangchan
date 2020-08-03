@@ -90,7 +90,7 @@ class HouseDetail extends React.Component {
     }
 
     componentDidMount() {
-        getHouseDetail({id: 4634}).then((res) => {
+        getHouseDetail({id: this.props.route.params.id}).then((res) => {
             if (res.status == 1) {
                 let newRes = {...res};
 
@@ -113,7 +113,6 @@ class HouseDetail extends React.Component {
     }
 
     huxingComponent(element,index) {
-        console.log(index)
         let item = element.item
         return (
             <View style={styles.houseTypeItem}>
@@ -159,50 +158,19 @@ class HouseDetail extends React.Component {
     render() {
         let img =
             'https://house.08cms.com/thumb/uploads/house/000/00/00/1/000/002/00ab7d1f20cfbc8a724dcd49b557bae7.jpg';
-        let picList = [
-            {
-                thumb: `https://house.08cms.com/thumb/uploads/house/000/00/00/1/000/002/390d87cc5e91f4450a46103e340f4eec.jpg`,
-                type: 'picture',
-            },
-            {
-                thumb: `https://house.08cms.com/thumb/uploads/house/000/00/00/1/000/002/390d87cc5e91f4450a46103e340f4eec.jpg`,
-                type: 'picture',
-            },
-        ];
-        let videoList = [
-            {
-                src:
-                    'http://vfx.mtime.cn/Video/2019/02/04/mp4/190204084208765161.mp4',
-                type: 'video',
-                poster:
-                    'https://house.08cms.com/thumb/uploads/house/000/00/00/1/000/002/390d87cc5e91f4450a46103e340f4eec.jpg',
-            },
-            {
-                src:
-                    'http://vfx.mtime.cn/Video/2019/03/21/mp4/190321153853126488.mp4',
-                type: 'video',
-                poster:
-                    'https://house.08cms.com/thumb/uploads/house/000/00/00/1/000/002/390d87cc5e91f4450a46103e340f4eec.jpg',
-            },
-        ];
-
         let houseInfo = this.state.houseInfo || {};
         let resData = this.state.resData
         let huxingList = resData && resData.huxing && resData.huxing.length && resData.huxing || []
-        console.log(resData)
+        let lphdpList = resData && resData.lphdp && resData.lphdp.length && resData.lphdp || []
+
         return (
             <View style={{paddingBottom: pt(60), marginTop: pt(2)}}>
                 <ScrollView>
                     <View style={styles.container}>
                         <View style={styles.swiper}>
-                            {this.state.resData &&
-                                this.state.resData.lphdp &&
-                                this.state.resData.lphdp.length && (
-                                    <Swipers
-                                        pictureList={
-                                            this.state.resData.lphdp
-                                        }></Swipers>
-                                )}
+                            {
+                                lphdpList.length? <Swipers pictureList={resData.lphdp}></Swipers> : null
+                            }
                         </View>
                         <View style={styles.mainInfo}>
                             <Text style={styles.mainInfoTitle}>
@@ -215,11 +183,12 @@ class HouseDetail extends React.Component {
                                             {(houseInfo &&
                                                 houseInfo.dj &&
                                                 Number(houseInfo.dj)) ||
-                                                '暂无资料'}
+                                                '待定'}
                                         </Text>
-                                        <Text style={styles.priceUnit}>
-                                            元/m²
-                                        </Text>
+                                        {
+                                            houseInfo.dj? <Text style={styles.priceUnit}>元/m²</Text> : null
+                                        }
+                                        
                                     </View>
                                     <Text style={styles.priceFieldItemName}>
                                         参考价格
@@ -364,7 +333,7 @@ class HouseDetail extends React.Component {
                             {
                                 resData.sortArea && resData.sortArea.length && resData.sortArea.map((item) => {
                                     return (
-                                        <HouseList {...item} key={item.id}></HouseList>
+                                        <HouseList {...item} key={item.id} navigation={this.props.navigation}></HouseList>
                                     )
                                 })
                             }
@@ -396,6 +365,7 @@ const styles = StyleSheet.create({
         //backgroundColor: 'pink',
     },
     mainInfo: {
+        //width: '100%',
         paddingLeft: pt(15),
         paddingRight: pt(15),
         paddingTop: pt(15),

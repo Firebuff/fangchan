@@ -14,7 +14,7 @@ const LineText = (props) => {
                     return <Text key={index} style={ styles.itemKey }>{item}</Text>;
                 })}
             </View>
-            <Text>{ value }</Text>
+            <Text style={styles.value}>{ value }</Text>
         </View>
     );
 };
@@ -39,9 +39,13 @@ const styles = StyleSheet.create({
         fontSize: pt(14),
     },
     listItem: {
+        width: '100%',
         flexDirection: 'row',
         justifyContent: 'flex-start'
     },
+    value: {
+        flex: 1
+    }
 });
 
 export default LineText;

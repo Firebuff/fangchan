@@ -1,5 +1,4 @@
 import React, {Component} from 'react';
-
 import {
     View,
     Text,
@@ -9,6 +8,7 @@ import {
     Button,
     Animated,
     Easing,
+    Image
 } from 'react-native';
 
 import pt from '../utils/px2dp/Px2dp';
@@ -26,58 +26,60 @@ import HouseList from '../components/house/list';
 
 import SaleList from '../components/sale/list';
 
-import Swiper from 'react-native-swiper';
+import {getIndex} from '../api';
+
+import Swiper from '../components/swiper';
 
 let naviList = [
     {
         icon: 'iconmaixinfang',
-        bg: '#06b6fb',
+        bg: '#FA554E',
         name: '买新房',
     },
     {
         icon: 'iconmaixinfang',
-        bg: '#06b6fb',
-        name: '买新房',
+        bg: '#18BA43',
+        name: '二手房',
     },
     {
         icon: 'iconmaixinfang',
-        bg: '#06b6fb',
-        name: '买新房',
+        bg: '#FF881D',
+        name: '找租房',
     },
     {
         icon: 'iconmaixinfang',
-        bg: '#06b6fb',
-        name: '买新房',
+        bg: '#01B1FE',
+        name: '商铺办公',
     },
     {
         icon: 'iconmaixinfang',
-        bg: '#06b6fb',
-        name: '买新房',
+        bg: '#FF5A7A',
+        name: '直播看房',
     },
     {
         icon: 'iconmaixinfang',
-        bg: '#06b6fb',
-        name: '买新房',
+        bg: '#FFA402',
+        name: '团购买房',
     },
     {
         icon: 'iconmaixinfang',
-        bg: '#06b6fb',
-        name: '买新房',
+        bg: '#1BD0B9',
+        name: '小区找房',
     },
     {
         icon: 'iconmaixinfang',
-        bg: '#06b6fb',
-        name: '买新房',
+        bg: '#747CF5',
+        name: '地图找房',
     },
     {
         icon: 'iconmaixinfang',
-        bg: '#06b6fb',
-        name: '买新房',
+        bg: '#26D178',
+        name: '查房价',
     },
     {
         icon: 'iconmaixinfang',
-        bg: '#06b6fb',
-        name: '买新房',
+        bg: '#3586F5',
+        name: '置业顾问',
     },
 ];
 
@@ -102,19 +104,9 @@ class Main extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            entries: [
-                {title: '热销新盘汇龙湾·天樾购房即可享9.5折优惠'},
-                {
-                    title:
-                        '中俄边境两头熊“开战”，观测相机被摧毁，专家：友谊的象征',
-                },
-                {
-                    title:
-                        '阿里巴巴（中国）有限公司被列为被执行人 执行标的超50万',
-                },
-            ],
             range: [0, 0],
             currentIndex: 0,
+            resData: {},
         };
         this.animateVal = new Animated.Value(0);
 
@@ -127,9 +119,25 @@ class Main extends Component {
                 ellipsizeMode={'tail'}
                 numberOfLines={1}
                 style={[Styles.liveNewsText]}>
-                {item.title}
+                {item.name}
             </Text>
         );
+    }
+
+    componentDidMount() {
+        getIndex().then((res) => {
+            console.log(res);
+            if (res.status == 1) {
+                let newRes = {...res};
+                newRes.appswiper.forEach((item) => {
+                    item.type = 'picture';
+                });
+                //console.log(newRes);
+                this.setState({
+                    resData: newRes,
+                });
+            }
+        });
     }
 
     cardSelect(item, index) {
@@ -145,7 +153,6 @@ class Main extends Component {
         }
 
         if (index == this.state.currentIndex) {
-            console.log(8897);
             return;
         }
 
@@ -172,8 +179,58 @@ class Main extends Component {
             inputRange: [0, 1], //输入值
             outputRange: arr, //输出值
         });
-        console.log(this.spin);
     };
+
+    showListComponent() {
+        let listComponent;
+        let listData;
+        if (this.state.currentIndex == 0) {
+            listData =
+                (this.state.resData.houses &&
+                    this.state.resData.houses.length &&
+                    this.state.resData.houses) ||
+                [];
+            return (
+                <View style={Styles.ListContent}>
+                    {listData.map((item, index) => {
+                        return (
+                            <HouseList
+                                {...item}
+                                key={item.id}
+                                navigation={this.props.navigation}></HouseList>
+                        );
+                    })}
+                    {listData.length ? (
+                        <View style={Styles.getMoreWrapper}>
+                            <Text style={Styles.getMore}>查看更多</Text>
+                        </View>
+                    ) : null}
+                </View>
+            );
+        } else if (this.state.currentIndex == 1) {
+            listData =
+                (this.state.resData.sale &&
+                    this.state.sale.resData.length &&
+                    this.state.resData.sale) ||
+                [];
+
+            return (
+                <View style={Styles.ListContent}>
+                    {listData.map((item, index) => {
+                        return <SaleList {...item} key={item.id}></SaleList>;
+                    })}
+                    {listData.length ? (
+                        <View style={Styles.getMoreWrapper}>
+                            <Text style={Styles.getMore}>查看更多</Text>
+                        </View>
+                    ) : null}
+                </View>
+            );
+        } else {
+            listData = [];
+            return null;
+        }
+    }
 
     render() {
         const spin = this.animateVal.interpolate({
@@ -181,34 +238,28 @@ class Main extends Component {
             outputRange: this.state.range, //输出值
         });
 
-        let showWhichList;
-
-        if (this.state.currentIndex == 0) {
-            showWhichList = <HouseList></HouseList>;
-        } else if (this.state.currentIndex == 1) {
-            showWhichList = <SaleList></SaleList>;
-        } else {
-            showWhichList = null;
-        }
-
+        let guideList =
+            (this.state.resData.guide &&
+                this.state.resData.guide.length &&
+                this.state.resData.guide) ||
+            [];
+        let appswiper = this.state.resData.appswiper || [];
         return (
             <ScrollView style={Styles.container}>
                 <View>
                     <View style={Styles.headerImg}>
-                        <Swiper style={Styles.wrapper} showsButtons={true}>
-                            <View style={Styles.slide1}>
-                                <Text style={Styles.text}>Hello Swiper</Text>
-                            </View>
-                            <View style={Styles.slide2}>
-                                <Text style={Styles.text}>Beautiful</Text>
-                            </View>
-                            <View style={Styles.slide3}>
-                                <Text style={Styles.text}>And simple</Text>
-                            </View>
-                        </Swiper>
+                        {appswiper.length ? (
+                            <Swiper
+                                pictureList={
+                                    this.state.resData.appswiper
+                                }></Swiper>
+                        ) : null}
                     </View>
                     <View style={Styles.mainContentWrapper}>
-                        <Card cornerRadius={pt(4)} style={{width: '100%'}}  elevation={pt(1)}>
+                        <Card
+                            cornerRadius={pt(4)}
+                            style={{width: '100%'}}
+                            elevation={pt(1)}>
                             <View style={Styles.mainContent}>
                                 <View style={Styles.navListWrapper}>
                                     <View style={Styles.navList}>
@@ -236,7 +287,7 @@ class Main extends Component {
                                         ref={(c) => {
                                             this._slider1Ref = c;
                                         }}
-                                        data={this.state.entries}
+                                        data={guideList}
                                         renderItem={this._renderItem}
                                         sliderHeight={pt(44)}
                                         itemHeight={pt(44)}
@@ -253,7 +304,10 @@ class Main extends Component {
                         </Card>
                     </View>
                     <View style={Styles.houseList}>
-                        <Card cornerRadius={pt(4)} style={{width: '100%'}}  elevation={pt(1)}>
+                        <Card
+                            cornerRadius={pt(4)}
+                            style={{width: '100%'}}
+                            elevation={pt(1)}>
                             <View style={Styles.houseListTitle}>
                                 <Animated.View style={{left: spin}}>
                                     <View style={[Styles.activeLine]}></View>
@@ -278,13 +332,30 @@ class Main extends Component {
                                     );
                                 })}
                             </View>
-                            <View style={Styles.ListContent}>
-                                {showWhichList}
-                            </View>
-                            <View style={ Styles.getMoreWrapper }>
-                                <Text style={ Styles.getMore }>查看更多</Text>
-                            </View>
+                            {this.showListComponent.bind(this)()}
                         </Card>
+                    </View>
+                    <View Styles={Styles.groupBuy}>
+                        <View style={{flexDirection:'row', justifyContent:'space-between'}}>
+                            <Image
+                                source={{uri: 'https://house.08cms.com/thumb/uploads/house/000/00/00/1/000/002/390d87cc5e91f4450a46103e340f4eec.jpg'}}
+                                style={{width: pt(124),height: pt(96)}}
+                            ></Image>
+                            <View>
+                                <Text>石排国际公馆现拼团购享额外优惠</Text>
+                                <Text>差5人成团，剩05:30:20结束</Text>
+                                <View>
+                                    <View>
+                                        <Text>15800</Text>
+                                        <Text>元/m²</Text>
+                                    </View>
+                                </View>
+                                <View>
+                                    <Text>16500</Text>
+                                    <Text>元/m²</Text>
+                                </View>
+                            </View>
+                        </View>
                     </View>
                 </View>
             </ScrollView>
@@ -307,8 +378,8 @@ const Styles = StyleSheet.create({
     },
     headerImg: {
         width: pt(375),
-        backgroundColor: 'pink',
-        height: pt(150),
+        backgroundColor: '#fff',
+        height: pt(250),
     },
     headerImgText: {
         fontSize: pt(28),
@@ -384,24 +455,6 @@ const Styles = StyleSheet.create({
         paddingRight: pt(15),
         width: '100%',
     },
-    slide1: {
-        flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
-        backgroundColor: '#9DD6EB',
-    },
-    slide2: {
-        flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
-        backgroundColor: '#97CAE5',
-    },
-    slide3: {
-        flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
-        backgroundColor: '#92BBD9',
-    },
     text: {
         color: '#fff',
         fontSize: 30,
@@ -412,18 +465,18 @@ const Styles = StyleSheet.create({
         lineHeight: pt(44),
         fontSize: pt(16),
         backgroundColor: '#f9f9f9',
-        color: '#d5ddec'
+        color: '#d5ddec',
     },
     getMoreWrapper: {
         backgroundColor: '#f9f9f9',
-        width: pt(375-60),
+        width: pt(375 - 60),
         alignSelf: 'center',
         paddingRight: pt(15),
         paddingLeft: pt(15),
         height: pt(44),
         marginBottom: pt(16),
-        borderRadius: pt(4)
-    }
+        borderRadius: pt(4),
+    },
 });
 
 export default Main;

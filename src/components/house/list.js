@@ -1,11 +1,17 @@
 import React, {Component} from 'react';
 
-import {View, Text, StyleSheet, Image} from 'react-native';
+import {
+    View,
+    Text,
+    StyleSheet,
+    Image,
+    TouchableWithoutFeedback,
+} from 'react-native';
 
 import pt from '../../utils/px2dp/Px2dp';
 
 function getName(params) {
-    let newParams = `${params}`
+    let newParams = `${params}`;
     let arr = newParams.split('</span>');
     let returnArr = [];
     let reg = new RegExp('^[\u4E00-\u9FFF]+$');
@@ -13,7 +19,6 @@ function getName(params) {
         let result = '';
         for (let key in element) {
             if (reg.test(element[key])) {
-                console.log(element[key]);
                 result += element[key];
             }
         }
@@ -24,58 +29,70 @@ function getName(params) {
     return returnArr;
 }
 
-
 const HouseList = (props) => {
+    //console.log(props);
     return (
-        <View style={styles.listContainer}>
-            <View style={styles.leftImg}>
-                <Image
-                    style={styles.img}
-                    resizeMode="cover"
-                    source={{
-                        uri: props.thumb,
-                    }}
-                />
-            </View>
-            <View style={styles.info}>
-                <View>
-                    <Text
-                        style={styles.title}
-                        ellipsizeMode="tail"
-                        numberOfLines={1}>
-                        {props.name}
-                    </Text>
+        <TouchableWithoutFeedback
+            onPress={
+                () => {
+                    props.navigation.push('HouseDetailScreen',{id: props.id})
+                }
+            }
+        >
+            <View style={styles.listContainer}>
+                <View style={styles.leftImg}>
+                    <Image
+                        style={styles.img}
+                        resizeMode="cover"
+                        source={{
+                            uri: props.thumb,
+                        }}
+                    />
                 </View>
+                <View style={styles.info}>
+                    <View>
+                        <Text
+                            style={styles.title}
+                            ellipsizeMode="tail"
+                            numberOfLines={1}>
+                            {props.name}
+                        </Text>
+                    </View>
 
-                <View>
-                    <Text
-                        ellipsizeMode="tail"
-                        numberOfLines={1}
-                        style={styles.addr}>
-                        {props.region}-{props.address}
-                    </Text>
-                </View>
-                <View style={styles.tagList}>
-                    <Text style={styles.tag}>{props.cate_status}</Text>
+                    <View>
+                        <Text
+                            ellipsizeMode="tail"
+                            numberOfLines={1}
+                            style={styles.addr}>
+                            {props.region}-{props.address}
+                        </Text>
+                    </View>
+                    <View style={styles.tagList}>
+                        <Text style={styles.tag}>{props.cate_status}</Text>
 
-                    {
-                        getName(props.cate_type).map((item, index) => {
+                        {getName(props.cate_type).map((item, index) => {
                             if (index < 4) {
                                 return (
-                                    <Text style={styles.tag} key={index}>{ item }</Text>
-                                )
+                                    <Text style={styles.tag} key={index}>
+                                        {item}
+                                    </Text>
+                                );
                             }
-                        })
-                    }
-                    
-                </View>
-                <View style={[styles.tagList, {alignItems: 'baseline'}]}>
-                    <Text style={styles.price}>{props.dj}</Text>
-                    <Text style={styles.unit}>元/m²</Text>
-                    <Text style={styles.size}>建面 {props.btwmj ? `${props.btwmj.value}`.replace(/\s/g, '') : '-' }</Text>
+                        })}
+                    </View>
+                    <View style={[styles.tagList, {alignItems: 'baseline'}]}>
+                        <Text style={styles.price}>{props.dj}</Text>
+                        <Text style={styles.unit}>元/m²</Text>
+                        <Text style={styles.size}>
+                            建面{' '}
+                            {props.btwmj
+                                ? `${props.btwmj.value}`.replace(/\s/g, '')
+                                : '-'}
+                        </Text>
+                    </View>
                 </View>
             </View>
-        </View>
+        </TouchableWithoutFeedback>
     );
 };
 export default HouseList;

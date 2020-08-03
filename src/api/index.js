@@ -13,3 +13,8 @@ export const getHouseDetail = (params) => {
     // console.log(params)
     return get('webapp/housesdetail', params)
 }
+
+export const getIndex = (params) => {
+    // console.log(params)
+    return get('webapp/index', params)
+}

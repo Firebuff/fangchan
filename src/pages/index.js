@@ -1,12 +1,14 @@
 import React from 'react';
 import {createStackNavigator, TransitionPresets} from '@react-navigation/stack';
 import {getFocusedRouteNameFromRoute} from '@react-navigation/native';
+import pt from '../utils/px2dp/Px2dp';
 
 //tabbar对应的页面
 import MainScreen from './main';
 import SaleScreen from './sale';
 import RentScreen from './rent';
 import HouseScreen from './house';
+import HouseDetailScreen from './houseDetail';
 
 
 // 引进tabbar
@@ -38,11 +40,16 @@ const StackComponent = function () {
                     backgroundColor: '#f04531',
                 },
                 headerTintColor: '#fff',
-                headerTitleStyle: {
+
+                //标题样式
+                headerTitleStyle: { 
                     fontWeight: 'bold',
-                    flexDirection: 'row',
-                    alignSelf: 'center',
+                    fontSize: pt(18),
                 },
+                //标题居中
+                headerTitleAlign: 'center', 
+                //页面左右切换动画
+                ...TransitionPresets.SlideFromRightIOS,
             }}
         >
             <Stack.Screen
@@ -52,8 +59,15 @@ const StackComponent = function () {
                     headerTitle: getHeaderTitle(route),
                 })}
             />
-            <Stack.Screen name="新房" component={HouseScreen} />
-            <Stack.Screen name="二手房" component={SaleScreen} />
+            <Stack.Screen name="HouseDetailScreen" component={HouseDetailScreen} 
+                //设置标题
+                options={
+                    { 
+                        title: '新房详情',
+                    }
+                }
+            />
+            {/*<Stack.Screen name="二手房" component={SaleScreen} />*/}
         </Stack.Navigator>
     );
 };
