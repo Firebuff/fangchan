@@ -8,7 +8,8 @@ import {
     Button,
     Animated,
     Easing,
-    Image
+    Image,
+    TouchableOpacity,
 } from 'react-native';
 
 import pt from '../utils/px2dp/Px2dp';
@@ -24,11 +25,17 @@ import Carousel from 'react-native-snap-carousel';
 
 import HouseList from '../components/house/list';
 
+import NewsList from '../components/news/list';
+
 import SaleList from '../components/sale/list';
 
 import {getIndex} from '../api';
 
-import Swiper from '../components/swiper';
+import Swipers from '../components/swiper';
+
+import DetailTitle from '../components/detail-title';
+
+import Swiper from 'react-native-swiper';
 
 let naviList = [
     {
@@ -37,37 +44,37 @@ let naviList = [
         name: '买新房',
     },
     {
-        icon: 'iconmaixinfang',
+        icon: 'iconershoufang',
         bg: '#18BA43',
         name: '二手房',
     },
     {
-        icon: 'iconmaixinfang',
+        icon: 'iconzhaozufang',
         bg: '#FF881D',
         name: '找租房',
     },
     {
-        icon: 'iconmaixinfang',
+        icon: 'iconshangpubangong',
         bg: '#01B1FE',
         name: '商铺办公',
     },
     {
-        icon: 'iconmaixinfang',
+        icon: 'iconzhibokanfang',
         bg: '#FF5A7A',
         name: '直播看房',
     },
     {
-        icon: 'iconmaixinfang',
+        icon: 'icontuangoumaifang',
         bg: '#FFA402',
         name: '团购买房',
     },
     {
-        icon: 'iconmaixinfang',
+        icon: 'iconxiaoquzhaofang',
         bg: '#1BD0B9',
         name: '小区找房',
     },
     {
-        icon: 'iconmaixinfang',
+        icon: 'icondituzhaofang',
         bg: '#747CF5',
         name: '地图找房',
     },
@@ -77,7 +84,7 @@ let naviList = [
         name: '查房价',
     },
     {
-        icon: 'iconmaixinfang',
+        icon: 'iconzhiyeguwen',
         bg: '#3586F5',
         name: '置业顾问',
     },
@@ -96,7 +103,7 @@ const contentNavList = [
         name: '出租房',
     },
     {
-        name: '特价房',
+        name: '资讯',
     },
 ];
 
@@ -226,10 +233,59 @@ class Main extends Component {
                     ) : null}
                 </View>
             );
+        } else if (this.state.currentIndex == 3) {
+            listData = this.state.resData.news || [];
+            return (
+                <View style={Styles.ListContent}>
+                    {listData.map((item, index) => {
+                        return <NewsList {...item} key={item.id}></NewsList>;
+                    })}
+                    {listData.length ? (
+                        <View style={Styles.getMoreWrapper}>
+                            <Text style={Styles.getMore}>查看更多</Text>
+                        </View>
+                    ) : null}
+                </View>
+            );
         } else {
             listData = [];
             return null;
         }
+    }
+
+    groupBuyItem(item, index) {
+        return (
+            <View style={Styles.groupBuyItem} key={index}>
+                <Image
+                    source={{
+                        uri: item.thumb,
+                    }}
+                    style={{
+                        width: pt(124),
+                        height: pt(96),
+                        marginRight: pt(12),
+                        borderRadius: pt(4),
+                    }}></Image>
+                <View style={Styles.groupBuyItemInfo}>
+                    <Text style={Styles.groupBuyItemTitle}>
+                        {item.name || ''}
+                    </Text>
+                    <Text style={Styles.time}>{item.end_time}结束</Text>
+                    <View style={Styles.groupBuyItemPrice}>
+                        <View style={Styles.priceInfo}>
+                            <Text style={Styles.priceNumber}>
+                                {item.tgj || ''}
+                            </Text>
+                            <Text style={Styles.priceUnit}>元/m²</Text>
+                        </View>
+                        <View style={Styles.priceInfo}>
+                            <Text style={Styles.oldPriceNumber}>16500</Text>
+                            <Text style={Styles.oldPriceUnit}>元/m²</Text>
+                        </View>
+                    </View>
+                </View>
+            </View>
+        );
     }
 
     render() {
@@ -244,15 +300,16 @@ class Main extends Component {
                 this.state.resData.guide) ||
             [];
         let appswiper = this.state.resData.appswiper || [];
+        let groupbuy = this.state.resData.groupbuy || [];
         return (
             <ScrollView style={Styles.container}>
                 <View>
                     <View style={Styles.headerImg}>
                         {appswiper.length ? (
-                            <Swiper
+                            <Swipers
                                 pictureList={
                                     this.state.resData.appswiper
-                                }></Swiper>
+                                }></Swipers>
                         ) : null}
                     </View>
                     <View style={Styles.mainContentWrapper}>
@@ -314,20 +371,26 @@ class Main extends Component {
                                 </Animated.View>
                                 {contentNavList.map((item, index) => {
                                     return (
-                                        <View style={Styles.textWrapper}>
-                                            <Text
-                                                style={
-                                                    Styles.houseListTitleText
-                                                }
+                                        <View
+                                            style={Styles.textWrapper}
+                                            key={index}>
+                                            <TouchableOpacity
                                                 onPress={() => {
                                                     this.cardSelect(
                                                         item,
                                                         index,
                                                     );
                                                 }}
-                                                key={index}>
-                                                {item.name}
-                                            </Text>
+                                                key={index}
+                                            >
+                                                <Text
+                                                    style={
+                                                        Styles.houseListTitleText
+                                                    }
+                                                >
+                                                    {item.name}
+                                                </Text>
+                                            </TouchableOpacity>
                                         </View>
                                     );
                                 })}
@@ -335,27 +398,33 @@ class Main extends Component {
                             {this.showListComponent.bind(this)()}
                         </Card>
                     </View>
-                    <View Styles={Styles.groupBuy}>
-                        <View style={{flexDirection:'row', justifyContent:'space-between'}}>
-                            <Image
-                                source={{uri: 'https://house.08cms.com/thumb/uploads/house/000/00/00/1/000/002/390d87cc5e91f4450a46103e340f4eec.jpg'}}
-                                style={{width: pt(124),height: pt(96)}}
-                            ></Image>
-                            <View>
-                                <Text>石排国际公馆现拼团购享额外优惠</Text>
-                                <Text>差5人成团，剩05:30:20结束</Text>
-                                <View>
-                                    <View>
-                                        <Text>15800</Text>
-                                        <Text>元/m²</Text>
-                                    </View>
-                                </View>
-                                <View>
-                                    <Text>16500</Text>
-                                    <Text>元/m²</Text>
-                                </View>
-                            </View>
+                    <View style={Styles.groupBuy}>
+                        <View style={{marginBottom: 1, paddingLeft: pt(15)}}>
+                            <DetailTitle name={'团购买房'}></DetailTitle>
                         </View>
+                        <Card
+                            cornerRadius={pt(4)}
+                            style={{width: '100%'}}
+                            elevation={pt(1)}>
+                            {groupbuy.length ? (
+                                <Swiper
+                                    style={{height: '100%'}}
+                                    height={pt(126)}
+                                    paginationStyle={{bottom: -pt(20)}}
+                                    dotColor={'#CCCCCC'}
+                                    activeDotStyle={{
+                                        width: pt(12),
+                                        height: pt(6),
+                                        borderRadius: pt(3),
+                                    }}
+                                    activeDotColor={'#F04531'}
+                                    dotStyle={{width: pt(6), height: pt(6)}}>
+                                    {groupbuy.map((item, index) => {
+                                        return this.groupBuyItem(item, index);
+                                    })}
+                                </Swiper>
+                            ) : null}
+                        </Card>
                     </View>
                 </View>
             </ScrollView>
@@ -476,6 +545,66 @@ const Styles = StyleSheet.create({
         height: pt(44),
         marginBottom: pt(16),
         borderRadius: pt(4),
+    },
+    groupBuyItemInfo: {
+        flex: 1,
+        justifyContent: 'space-around',
+    },
+    groupBuyItem: {
+        flexDirection: 'row',
+        justifyContent: 'flex-start',
+        paddingLeft: pt(15),
+        paddingRight: pt(15),
+        paddingBottom: pt(15),
+        paddingTop: pt(15),
+        width: pt(375 - 30),
+    },
+    groupBuyItemPrice: {
+        flexDirection: 'row',
+        justifyContent: 'flex-start',
+    },
+    priceInfo: {
+        flexDirection: 'row',
+        justifyContent: 'flex-start',
+    },
+    groupBuyItemTitle: {
+        fontSize: pt(18),
+        color: '#101D37',
+        fontWeight: 'bold',
+    },
+    groupBuy: {
+        paddingLeft: pt(15),
+        paddingRight: pt(15),
+        width: pt(375),
+        marginBottom: pt(30),
+    },
+    time: {
+        color: '#919AAA',
+        fontSize: pt(12),
+    },
+    priceNumber: {
+        color: '#F04531',
+        fontSize: pt(18),
+        fontWeight: 'bold',
+    },
+    priceUnit: {
+        fontSize: pt(10),
+        color: '#F04531',
+        alignSelf: 'flex-end',
+        marginRight: pt(15),
+        lineHeight: pt(20),
+    },
+    oldPriceNumber: {
+        fontSize: pt(12),
+        color: '#919AAA',
+        alignSelf: 'center',
+        textDecorationLine: 'line-through',
+    },
+    oldPriceUnit: {
+        color: '#919AAA',
+        fontSize: pt(10),
+        alignSelf: 'center',
+        textDecorationLine: 'line-through',
     },
 });
 

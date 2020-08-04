@@ -12,7 +12,11 @@ const DetailTitle = (props) => {
             <Text  style={ styles.titleText }>{ name }</Text>
             <View style={ styles.right }>
                 <Text style={ styles.iconName }>{ iconName }</Text>
-                <Svg name="icongengduo_ccc" width={pt(12)} height={pt(20)}></Svg>
+
+                {
+                    iconName? <Svg name="icongengduo_ccc" width={pt(12)} height={pt(20)}></Svg> : null
+                }
+               
             </View>
         </View>
     );
