@@ -37,6 +37,8 @@ import DetailTitle from '../components/detail-title';
 
 import Swiper from 'react-native-swiper';
 
+const moment = require('moment')
+
 let naviList = [
     {
         icon: 'iconmaixinfang',
@@ -238,7 +240,7 @@ class Main extends Component {
             return (
                 <View style={Styles.ListContent}>
                     {listData.map((item, index) => {
-                        return <NewsList {...item} key={item.id}></NewsList>;
+                        return <NewsList {...item} key={item.id} navigation={this.props.navigation}></NewsList>;
                     })}
                     {listData.length ? (
                         <View style={Styles.getMoreWrapper}>
@@ -270,7 +272,7 @@ class Main extends Component {
                     <Text style={Styles.groupBuyItemTitle}>
                         {item.name || ''}
                     </Text>
-                    <Text style={Styles.time}>{item.end_time}结束</Text>
+                    <Text style={Styles.time}>{moment(item.end_time*1000).format('YYYY.MM.DD')}结束</Text>
                     <View style={Styles.groupBuyItemPrice}>
                         <View style={Styles.priceInfo}>
                             <Text style={Styles.priceNumber}>

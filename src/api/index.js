@@ -18,3 +18,7 @@ export const getIndex = (params) => {
     // console.log(params)
     return get('webapp/index', params)
 }
+export const getNewsDetail = (params) => {
+    // console.log(params)
+    return get('webapp/newsdetail', params)
+}

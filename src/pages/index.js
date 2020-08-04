@@ -9,6 +9,7 @@ import SaleScreen from './sale';
 import RentScreen from './rent';
 import HouseScreen from './house';
 import HouseDetailScreen from './houseDetail';
+import NewsDetailScreen from './newsDetail';
 
 
 // 引进tabbar
@@ -67,7 +68,15 @@ const StackComponent = function () {
                     }
                 }
             />
-            {/*<Stack.Screen name="二手房" component={SaleScreen} />*/}
+            <Stack.Screen name="NewsDetailScreen" component={NewsDetailScreen} 
+                //设置标题
+                options={
+                    { 
+                        title: '资讯详情',
+                    }
+                }
+            />
+           
         </Stack.Navigator>
     );
 };
