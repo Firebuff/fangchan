@@ -8,7 +8,7 @@ import {Image, Text} from 'react-native';
 
 //tabbar对应的页面
 import MainScreen from './main';
-import SaleScreen from './sale';
+import MemberCenterScreen from './memberCenter';
 import RentScreen from './rent';
 import HouseScreen from './house';
 
@@ -24,7 +24,11 @@ const TabbarNavigate = function () {
         >
             <Tabbar.Screen name="首页" component={MainScreen} />
             <Tabbar.Screen name="新房" component={HouseScreen} />
-            <Tabbar.Screen name="二手房" component={SaleScreen} />
+            <Tabbar.Screen name="MemberCenterScreen" component={MemberCenterScreen} 
+                options={{
+                    title: '我的'
+                }}
+            />
         </Tabbar.Navigator>
     );
 };
@@ -41,10 +45,10 @@ function setIcon({route}) {
                 url = focused
                     ? require('../static/images/tab/22.png')
                     : require('../static/images/tab/2.png');
-            } else if (route.name == '二手房') {
+            } else if (route.name == 'MemberCenterScreen') {
                 url = focused
-                    ? require('../static/images/tab/44.png')
-                    : require('../static/images/tab/4.png');
+                    ? require('../static/images/tab/55.png')
+                    : require('../static/images/tab/5.png');
             }
             return <Image height="20" width="20" source={url} />;
         },

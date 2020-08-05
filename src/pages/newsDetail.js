@@ -8,7 +8,7 @@ import HTMLView from 'react-native-htmlview';
 
 import pt from '../utils/px2dp/Px2dp';
 
-const moment = require('moment')
+const moment = require('moment');
 
 class NewsDetail extends React.Component {
     constructor(props) {
@@ -18,10 +18,7 @@ class NewsDetail extends React.Component {
         };
     }
     componentDidMount() {
-        this.setState({
-            data: {},
-        });
-        getNewsDetail({id: 862}).then((res) => {
+        getNewsDetail({id: this.props.route.params.id}).then((res) => {
             console.log(res);
             if (res.status == 1) {
                 this.setState({
@@ -31,17 +28,26 @@ class NewsDetail extends React.Component {
         });
     }
     render() {
+        let data = this.state.data;
         return (
             <ScrollView>
                 <View style={styles.wrapper}>
-                    <Text style={styles.title}>{this.state.data.name}</Text>
-                    <Text style={styles.date}>
-                        {moment(this.state.data.create_time*1000).format('YYYY.MM.DD')}
-                    </Text>
-                    <HTMLView
-                        value={this.state.data.content}
-                        stylesheet={styles}
-                    />
+                    {data.name ? (
+                        <Text style={styles.title}>{data.name}</Text>
+                    ) : null}
+                    {
+                        data.create_time? <Text style={styles.date}>
+                            {moment(data.create_time * 1000).format(
+                                'YYYY.MM.DD',
+                            )}
+                        </Text> : null
+                    }
+
+                    {
+                       data.content? <HTMLView
+                        value={data.content}
+                        stylesheet={styles} /> : null
+                    }
                 </View>
             </ScrollView>
         );
@@ -65,7 +71,7 @@ const styles = StyleSheet.create({
         paddingLeft: pt(15),
         paddingRight: pt(15),
         lineHeight: pt(22),
-        paddingBottom: pt(20)
+        paddingBottom: pt(20),
     },
     p: {
         color: '#333333',

@@ -206,7 +206,11 @@ class Main extends Component {
                             <HouseList
                                 {...item}
                                 key={item.id}
-                                navigation={this.props.navigation}></HouseList>
+                                navigation={this.props.navigation}
+                                idParam={'fromid'}
+                            >
+
+                            </HouseList>
                         );
                     })}
                     {listData.length ? (
@@ -240,7 +244,7 @@ class Main extends Component {
             return (
                 <View style={Styles.ListContent}>
                     {listData.map((item, index) => {
-                        return <NewsList {...item} key={item.id} navigation={this.props.navigation}></NewsList>;
+                        return <NewsList {...item} key={item.id} idParam={'fromid'} navigation={this.props.navigation}></NewsList>;
                     })}
                     {listData.length ? (
                         <View style={Styles.getMoreWrapper}>

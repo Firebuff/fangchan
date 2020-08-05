@@ -10,7 +10,7 @@ const NewsListItem = (props) => {
     return (
         <TouchableOpacity
             onPress={() => {
-                props.navigation.push('NewsDetailScreen', {id: props.id});
+                props.navigation.push('NewsDetailScreen', {id: props[props.idParam]});
             }}>
             <View style={styles.itemWrapper}>
                 <View style={styles.itemInfo}>

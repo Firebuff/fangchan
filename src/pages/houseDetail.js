@@ -144,7 +144,7 @@ class HouseDetail extends React.Component {
             <FlatList 
                 data={ list } 
                 renderItem={this.huxingComponent}
-                keyExtractor={item => item.id}
+                keyExtractor={item => item.id.toString()}
                 horizontal={true}
                 showsHorizontalScrollIndicator = {false}
                 ItemSeparatorComponent = {
@@ -331,9 +331,9 @@ class HouseDetail extends React.Component {
                                 name={'猜你喜欢'}
                                 iconName={'查看更多'}></DetailTitle>
                             {
-                                resData.sortArea && resData.sortArea.length && resData.sortArea.map((item) => {
+                                resData.sortPrices && resData.sortPrices.length && resData.sortPrices.map((item) => {
                                     return (
-                                        <HouseList {...item} key={item.id} navigation={this.props.navigation}></HouseList>
+                                        <HouseList {...item} key={item.id} idParam={'id'} navigation={this.props.navigation}></HouseList>
                                     )
                                 })
                             }

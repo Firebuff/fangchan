@@ -12,6 +12,7 @@ import {Card} from 'react-native-shadow-cards';
 import pt from '../utils/px2dp/Px2dp';
 
 import Selects from '../components/select/index';
+import Search from '../components/search/index';
 
 import {
     setMoreHouseList,
@@ -24,6 +25,9 @@ import {
 import {connect} from 'react-redux';
 
 import Spinkiter from 'react-native-spinkit';
+
+import { Input } from 'react-native-elements';
+
 
 class House extends Component {
     constructor(props) {
@@ -87,6 +91,34 @@ class House extends Component {
         }, 300);
     }
 
+    searchByKeyWord (name) {
+         // 显示加载图标
+         this.setState({
+            refreshing: true,
+        });
+        let dispatch = this.props.dispatch;
+
+        let state = this.props.houseListData;
+
+        // 获取state上面的请求参数，将请求页数设置为1
+        let requestParams = {...state.requestParams, name: name, pageIndex: 1};
+
+
+        // 将list数据设置为[]
+        dispatch(clearAll());
+
+        // 将是否加载更多设置为 true
+        dispatch(setIsMore(true));
+
+        dispatch(setQuestParam(requestParams));
+
+        // 由于更新 reducer 后 不能立即获取到上面的最新数据，所以用了延时 setTimeout
+        setTimeout(() => {
+            this.getData();
+        }, 300);
+        
+    }
+
     searchHandle(params) {
         // 显示加载图标
         this.setState({
@@ -119,7 +151,7 @@ class House extends Component {
         }, 300);
     }
     renderItem(item) {
-        return <HouseList {...item.item} key={item.id} navigation={this.props.navigation}></HouseList>;
+        return <HouseList {...item.item} key={item.id} idParam={'id'} navigation={this.props.navigation}></HouseList>;
     }
 
     footerComponent() {
@@ -148,7 +180,8 @@ class House extends Component {
     render() {
         let state = this.props.houseListData;
         return (
-            <View style={{height: '100%'}}>
+            <View style={{height: '100%',}}>
+                <Search searchByKeyWord={this.searchByKeyWord.bind(this)}></Search>
                 <View
                     style={{
                         alignSelf: 'center',
@@ -161,9 +194,9 @@ class House extends Component {
                         style={{
                             width: '100%',
                             alignItems: 'center',
-                            height: '98%',
+                            height: '92%',
                             paddingTop: 10,
-                            marginTop: pt(5),
+                            //marginTop: pt(5),
                             position: 'absolute',
                             zIndex: 5,
                             top: 0,
@@ -186,6 +219,7 @@ class House extends Component {
                             onEndReached={() => {
                                 this.loadMore();
                             }}
+                            showsVerticalScrollIndicator = {false}
                             numColumns={1}
                             refreshing={this.state.refreshing}
                             initialNumToRender={5}

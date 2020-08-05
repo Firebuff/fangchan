@@ -5,11 +5,11 @@ import pt from '../utils/px2dp/Px2dp';
 
 //tabbar对应的页面
 import MainScreen from './main';
-import SaleScreen from './sale';
 import RentScreen from './rent';
 import HouseScreen from './house';
 import HouseDetailScreen from './houseDetail';
 import NewsDetailScreen from './newsDetail';
+import PhoneLoginScreen from './phoneLogin';
 
 
 // 引进tabbar
@@ -24,9 +24,9 @@ function getHeaderTitle(route) {
         case '首页':
             return '首页';
         case '新房':
-            return '新房';
-        case '二手房':
-            return '二手房';
+            return '新房资源';
+        case 'MemberCenterScreen':
+            return '个人中心';
     }
 }
 
@@ -73,6 +73,14 @@ const StackComponent = function () {
                 options={
                     { 
                         title: '资讯详情',
+                    }
+                }
+            />
+            <Stack.Screen name="PhoneLoginScreen" component={PhoneLoginScreen} 
+                //设置标题
+                options={
+                    { 
+                        title: '手机登录',
                     }
                 }
             />

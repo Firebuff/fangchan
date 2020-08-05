@@ -11,6 +11,7 @@ import {
     StyleSheet,
     Alert,
     Dimensions,
+    TouchableOpacity,
 } from 'react-native';
 
 import {Button} from 'react-native-elements';
@@ -186,6 +187,7 @@ class Select extends Component {
         return navList;
     }
 
+    //筛选项点击事件
     itemSelecthandle(index, key, value, name) {
         let list = this.state.choiseList;
         let selectParams = {};
@@ -230,7 +232,7 @@ class Select extends Component {
             () => {},
         );
     }
-
+    //显示哪一块选项区
     showWhich(that, item, index) {
         if (this.state.currentNavIndex != 3) {
             return (
@@ -329,6 +331,7 @@ class Select extends Component {
             selectParams: newSelectParams
         });
     }
+    //蒙层
     marskComponent(that) {
         //console.log(that.state.hideMarsk);
         if (that.state.hideMarsk) {
@@ -353,6 +356,7 @@ class Select extends Component {
         }
     }
 
+    //更多选项中确定按钮点击事件
     confirmHandle() {
         setTimeout(() => {
             this.props.getData(this.state.selectParams);
@@ -362,7 +366,7 @@ class Select extends Component {
             this.spin();
         },100);
     }
-
+    //更多选项中按钮组件
     buttonComponent() {
         if (this.state.currentNavIndex == 3) {
             return (
@@ -387,6 +391,7 @@ class Select extends Component {
         } else {
         }
     }
+    //点击蒙层的事件
     marskClickHandle() {
         //console.log('handle');
         this.navClickHandle(this.state.currentNavIndex);
@@ -414,10 +419,10 @@ class Select extends Component {
                     width: pt(375 - 20),
                     height: pt(46),
                 }}>
-                <View style={styles.navWrapper}>
+                <View style={[styles.navWrapper,{borderBottomWidth: navList.length?pt(1):0}]}>
                     {navList.map((item, index) => {
                         return (
-                            <TouchableHighlight
+                            <TouchableOpacity
                                 underlayColor="rgba(255,255,255,0.3)"
                                 onPress={() => {
                                     this.navClickHandle(index);
@@ -452,7 +457,7 @@ class Select extends Component {
                                         width={pt(24)}
                                         height={pt(12)}></Svg>
                                 </View>
-                            </TouchableHighlight>
+                            </TouchableOpacity>
                         );
                     })}
                 </View>

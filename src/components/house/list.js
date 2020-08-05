@@ -35,7 +35,7 @@ const HouseList = (props) => {
         <TouchableWithoutFeedback
             onPress={
                 () => {
-                    props.navigation.push('HouseDetailScreen',{id: props.id})
+                    props.navigation.push('HouseDetailScreen',{id: props[props.idParam]})
                 }
             }
         >
@@ -157,13 +157,13 @@ const styles = StyleSheet.create({
     },
     unit: {
         fontSize: pt(10),
-        lineHeight: pt(18),
+        lineHeight: pt(20),
         color: '#F04531',
     },
     size: {
         fontSize: pt(10),
         marginLeft: pt(10),
         color: '#919AAA',
-        lineHeight: pt(18),
+        lineHeight: pt(20),
     },
 });
