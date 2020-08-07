@@ -1,53 +1,95 @@
-import { LOADMORE, CLEARHOUSELIST, ISMORE, SETPAGEINDEX,  CLEARLIST, SETREQUESTPARAMS } from './action-type'
+import {
+    LOADMORE,
+    CLEARHOUSELIST,
+    ISMORE,
+    SETPAGEINDEX,
+    CLEARLIST,
+    SETREQUESTPARAMS,
+	SETCSRF,
+	SETUSERINFO,
+	SETLOGIN
+} from './action-type';
 
-import { getHouseList } from '../api';
+import {getHouseList} from '../api';
 
-export  const setMoreHouseList =  (data) => {
-	return {
-		type: LOADMORE,
-		data: data
-	}
-}
-
-
+export const setMoreHouseList = (data) => {
+    return {
+        type: LOADMORE,
+        data: data,
+    };
+};
 
 //清空列表数据 以及搜索条件
 export const clearAll = () => {
-	return {
-		type: CLEARHOUSELIST,
-		data: []
-	}
-}
+    return {
+        type: CLEARHOUSELIST,
+        data: [],
+    };
+};
 
 export const setQuestParam = (data) => {
-	return {
-		type: SETREQUESTPARAMS,
-		data: data
-	}
-}
+    return {
+        type: SETREQUESTPARAMS,
+        data: data,
+    };
+};
 
 // 设置请求的页数
-export const setPageIndex  = (data) => {
-	return {
-		type: SETPAGEINDEX,
-		data: data
-	}
-}
-
+export const setPageIndex = (data) => {
+    return {
+        type: SETPAGEINDEX,
+        data: data,
+    };
+};
 
 // 设置是否请求更多
-export const setIsMore  = (data) => {
-	return {
-		type: ISMORE,
-		data: data
-	}
-}
+export const setIsMore = (data) => {
+    return {
+        type: ISMORE,
+        data: data,
+    };
+};
+
+// 设置CSRF
+export const setCSRF = (data) => {
+    return {
+        type: SETCSRF,
+        data: data,
+    };
+};
+
+// 设置用户信息
+export const setUserInfo = (data) => {
+    return {
+        type: SETUSERINFO,
+        data: data,
+    };
+};
+
+// 设置登录状态
+export const  setLogin = (data) => {
+    return {
+        type: SETLOGIN,
+        data: data,
+    };
+};
+
+
+
+
+
+
+
+
+
+
+
 
 
 
 
 //export const loadHouseList = (params) => {
-	
+
 //	let { currentPageIndex, requestParams, isMore, refresh } = params
 
 //	if (refresh) {
@@ -63,7 +105,7 @@ export const setIsMore  = (data) => {
 //		//如果是最后一页
 //		if (!isMore) return setIsMore(false)
 //		return async function (dispatch) {
-			
+
 //			let res = await getHouseList(params)
 //			console.log(res)
 //			if (res.status == 1) {
@@ -79,6 +121,5 @@ export const setIsMore  = (data) => {
 //			}
 //		}
 //	}
-	
-	
+
 //}

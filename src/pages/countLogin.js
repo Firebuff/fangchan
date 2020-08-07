@@ -20,7 +20,7 @@ import Svg from '../components/svg';
 
 import {CheckBox} from 'react-native-elements';
 
-import {getMessageCode, getMessageType, loginByPhone, getUserInfo} from '../api';
+import {getUserInfo, loginByCount} from '../api';
 
 import { setUserInfo, setCSRF, setLogin } from '../redux/actions'
 
@@ -32,11 +32,9 @@ class PhoneLogin extends React.Component {
         super(props);
         this.state = {
             checked: false,
-            phone: '',
-            code: '',
+            userName: '',
+            passWord: '',
             buttonActive: false,
-            timeCount: 0,
-            timer: null
         };
     }
     // input事件
@@ -46,7 +44,7 @@ class PhoneLogin extends React.Component {
                 [key]: res,
             },
             () => {
-                if (this.state.phone && this.state.code) {
+                if (this.state.userName && this.state.passWord) {
                     this.setState({buttonActive: true});
                     return;
                 }
@@ -66,47 +64,16 @@ class PhoneLogin extends React.Component {
             },
         ]);
     }
-    // 倒计时
-    timeCountHandle() {
-        if (!this.state.phone) {
-            this.alertHandle('手机号码不能为空')
-            return
-        }
-        this.setState(
-            {
-                timeCount: 60,
-            },
-            () => {
-
-                
-                let timer = setInterval(() => {
-                    if (this.state.timeCount == 0) {
-                        clearInterval(this.state.timer);
-                        this.setState({
-                            timeCount: 0,
-                        });
-                        return;
-                    }
-                    this.setState({
-                        timeCount: this.state.timeCount - 1,
-                    });
-                }, 1000);
-                this.setState({
-                    timer: timer
-                })
-            },
-        );
-    }
     // 表单验证
     checkHandle() {
-        if (this.state.phone && this.state.code && this.state.checked)
+        if (this.state.userName && this.state.passWord && this.state.checked)
             return true;
-        if (!this.state.phone) {
-            this.alertHandle('手机号码不能为空');
+        if (!this.state.userName) {
+            this.alertHandle('请输入登录账号');
             return false;
         }
-        if (!this.state.code) {
-            this.alertHandle('验证码不能为空');
+        if (!this.state.passWord) {
+            this.alertHandle('请输入登录密码');
             return false;
         }
         if (!this.state.checked) {
@@ -119,28 +86,36 @@ class PhoneLogin extends React.Component {
         if (!this.checkHandle()) return;
         let params = {
             type: 1,
-            userName: this.state.phone,
-            vcode: this.state.code
+            userName: this.state.userName,
+            passWord: this.state.passWord
         }
         console.log(params)
-        loginByPhone(params).then((res) => {
-            //console.log(res)
-            if (res.status == 1) {
-                this.alertHandle(res.info)
-                getUserInfo().then(userRes => {
-                    //console.log(userRes)
-                    if (userRes.status == 1) {
-                        this.props.dispatch(setUserInfo(userRes))
-                        this.props.dispatch(setCSRF(userRes.csrf_token))
-                        this.props.dispatch(setLogin(true))
-                        //跳转到会员中心
-                        this.props.navigation.navigate('MemberCenterScreen')
-                    }
-                })
-            } else {
-                this.alertHandle(res.info)
-            }
+
+        loginByCount(params).then ( (res) => {
+            console.log(res)
         })
+
+
+
+
+        //loginByPhone(params).then((res) => {
+        //    //console.log(res)
+        //    if (res.status == 1) {
+        //        this.alertHandle(res.info)
+        //        getUserInfo().then(userRes => {
+        //            //console.log(userRes)
+        //            if (userRes.status == 1) {
+        //                this.props.dispatch(setUserInfo(userRes))
+        //                this.props.dispatch(setCSRF(userRes.csrf_token))
+        //                this.props.dispatch(setLogin(true))
+        //                //跳转到会员中心
+        //                this.props.navigation.navigate('MemberCenterScreen')
+        //            }
+        //        })
+        //    } else {
+        //        this.alertHandle(res.info)
+        //    }
+        //})
     }
 
     sendMessage() {
@@ -182,35 +157,19 @@ class PhoneLogin extends React.Component {
             <View style={styles.wrapper}>
                 <TextInput
                     style={styles.input}
-                    placeholder={'请输入您的手机号'}
+                    placeholder={'请输入您的账号'}
                     placeholderTextColor={'#CCCCCC'}
-                    keyboardType={'numeric'}
                     onChangeText={(res) => {
-                        this.inputHandle(res, 'phone');
+                        this.inputHandle(res, 'userName');
                     }}></TextInput>
                 <View>
                     <TextInput
                         style={[styles.input, styles.codeInput]}
-                        placeholder={'请输入短信验证码'}
+                        placeholder={'请输入登录密码'}
                         placeholderTextColor={'#CCCCCC'}
                         onChangeText={(res) => {
-                            this.inputHandle(res, 'code');
+                            this.inputHandle(res, 'passWord');
                         }}></TextInput>
-                    <TouchableOpacity
-                        style={styles.codeBtn}
-                        onPress={() => {
-                            if (this.state.timeCount != 0) return;
-                            this.sendMessage()
-                            this.timeCountHandle();
-                        }}>
-                        {this.state.timeCount == 0 ? (
-                            <Text style={{color: '#F04531'}}>获取验证码</Text>
-                        ) : (
-                            <Text style={{color: '#00965e'}}>
-                                {this.state.timeCount}秒后重新获取
-                            </Text>
-                        )}
-                    </TouchableOpacity>
                 </View>
 
                 <TouchableOpacity

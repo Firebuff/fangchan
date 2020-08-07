@@ -10,6 +10,7 @@ import HouseScreen from './house';
 import HouseDetailScreen from './houseDetail';
 import NewsDetailScreen from './newsDetail';
 import PhoneLoginScreen from './phoneLogin';
+import CountLoginScreen from './countLogin';
 
 
 // 引进tabbar
@@ -81,6 +82,14 @@ const StackComponent = function () {
                 options={
                     { 
                         title: '手机登录',
+                    }
+                }
+            />
+            <Stack.Screen name="CountLoginScreen" component={CountLoginScreen} 
+                //设置标题
+                options={
+                    { 
+                        title: '账号登录',
                     }
                 }
             />

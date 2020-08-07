@@ -29,13 +29,17 @@ import NewsList from '../components/news/list';
 
 import SaleList from '../components/sale/list';
 
-import {getIndex} from '../api';
+import {getIndex, getToken} from '../api';
 
 import Swipers from '../components/swiper';
 
 import DetailTitle from '../components/detail-title';
 
 import Swiper from 'react-native-swiper';
+
+import { setCSRF } from '../redux/actions'
+
+import { connect } from 'react-redux'
 
 const moment = require('moment')
 
@@ -147,6 +151,10 @@ class Main extends Component {
                 });
             }
         });
+        // 获取表单token
+        getToken().then((res) => {
+            this.props.dispatch(setCSRF(res.csrf_token))
+        })
     }
 
     cardSelect(item, index) {
@@ -614,4 +622,5 @@ const Styles = StyleSheet.create({
     },
 });
 
-export default Main;
+export default connect((state) => ({globalData: state.globalHouseData}))(Main)
+
