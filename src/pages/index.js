@@ -11,6 +11,8 @@ import HouseDetailScreen from './houseDetail';
 import NewsDetailScreen from './newsDetail';
 import PhoneLoginScreen from './phoneLogin';
 import CountLoginScreen from './countLogin';
+import WalletScreen from './wallet';
+import PaymentScreen from './payment';
 
 
 // 引进tabbar
@@ -90,6 +92,22 @@ const StackComponent = function () {
                 options={
                     { 
                         title: '账号登录',
+                    }
+                }
+            />
+            <Stack.Screen name="WalletScreen" component={WalletScreen} 
+                //设置标题
+                options={
+                    { 
+                        title: '我的钱包',
+                    }
+                }
+            />
+            <Stack.Screen name="PaymentScreen" component={PaymentScreen} 
+                //设置标题
+                options={
+                    { 
+                        title: '充值余额',
                     }
                 }
             />

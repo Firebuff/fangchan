@@ -16,6 +16,8 @@ import LineText from '../components/line-text';
 
 import Svg from '../components/svg';
 
+import {connect} from 'react-redux';
+
 // 设置border-shadow的组件
 import {Card} from 'react-native-shadow-cards';
 
@@ -79,29 +81,56 @@ class MemberCenter extends React.Component {
         this.state = {};
     }
     render() {
+        console.log(this.props);
+
+        let userInfo = this.props.globalData.userInfo;
+        let isLogin = this.props.globalData.login;
+
+        let tepImg =
+            'https://house.08cms.com/thumb/uploads/house/000/00/00/1/000/002/00ab7d1f20cfbc8a724dcd49b557bae7.jpg';
         return (
             <View>
                 <View style={styles.userInfo}>
-                    <Image
-                        style={styles.img}
-                        source={{
-                            uri:
-                                'https://house.08cms.com/thumb/uploads/house/000/00/00/1/000/002/00ab7d1f20cfbc8a724dcd49b557bae7.jpg',
-                        }}></Image>
+                    <View style={styles.imgWrapper}>
+                        <Image
+                            style={styles.img}
+                            resizeMode={'cover'}
+                            source={{
+                                uri: isLogin ? userInfo.image : tepImg,
+                            }}></Image>
+                    </View>
 
-                    <TouchableOpacity style={styles.infoText}
-                        onPress= {
-                            () => {
-                                console.log(this.props)
-                                this.props.navigation.navigate('CountLoginScreen')
-                            }
-                        }
-                    
-                    >
-                        <View style={{justifyContent: 'space-around',height: pt(60)}}>
-                            <Text style={styles.loginBtn}>登录/注册</Text>
+                    <TouchableOpacity
+                        style={styles.infoText}
+                        onPress={() => {
+                            if(isLogin)return
+                            this.props.navigation.navigate('CountLoginScreen');
+                        }}>
+                        <View
+                            style={{
+                                justifyContent: 'space-around',
+                                height: pt(60),
+                            }}>
+                            <View
+                                style={{
+                                    flexDirection: 'row',
+                                    justifyContent: 'center',
+                                }}>
+                                <Text style={styles.loginBtn}>
+                                    {isLogin ? userInfo.fullname : '登录/注册'}
+                                </Text>
+
+                                {isLogin ? (
+                                    <Text style={styles.level}>
+                                        {userInfo.rolename}
+                                    </Text>
+                                ) : null}
+                            </View>
+
                             <Text style={styles.infoTextDesc}>
-                                登录即可体验更多服务
+                                {isLogin
+                                    ? `ID${userInfo.id}`
+                                    : '登录即可体验更多服务'}
                             </Text>
                         </View>
                     </TouchableOpacity>
@@ -115,7 +144,11 @@ class MemberCenter extends React.Component {
                         top: pt(90),
                     }}>
                     <View style={styles.userNavList}>
-                        <TouchableOpacity>
+                        <TouchableOpacity
+                            onPress = { () => {
+                                this.props.navigation.navigate('WalletScreen');
+                            }}
+                        >
                             <View>
                                 <View style={styles.userNavItemIcon}>
                                     <Svg
@@ -236,12 +269,19 @@ class MemberCenter extends React.Component {
 }
 
 const styles = StyleSheet.create({
+    imgWrapper: {
+        width: pt(62),
+        height: pt(62),
+        borderRadius: pt(30),
+        backgroundColor: 'purple',
+        borderWidth: pt(2),
+        borderColor: '#fff',
+        overflow: 'hidden',
+    },
     img: {
         width: pt(60),
         height: pt(60),
         borderRadius: pt(30),
-        borderWidth: pt(2),
-        borderColor: '#fff',
     },
     userInfo: {
         backgroundColor: '#F04531',
@@ -259,6 +299,7 @@ const styles = StyleSheet.create({
     loginBtn: {
         fontWeight: 'bold',
         fontSize: pt(18),
+        lineHeight: pt(25),
         color: '#fff',
     },
     infoTextDesc: {
@@ -325,5 +366,19 @@ const styles = StyleSheet.create({
         lineHeight: pt(18),
         marginLeft: pt(10),
     },
+    level: {
+        fontSize: pt(10),
+        paddingLeft: pt(6),
+        paddingRight: pt(6),
+        borderRadius: pt(20),
+        borderWidth: pt(1),
+        height: pt(16),
+        borderColor: '#fff',
+        marginLeft: pt(5),
+        color: '#fff',
+        alignSelf: 'center',
+    },
 });
-export default MemberCenter;
+export default connect((state) => ({globalData: state.globalHouseData}))(
+    MemberCenter,
+);

@@ -27,7 +27,7 @@ import { setUserInfo, setCSRF, setLogin } from '../redux/actions'
 import { connect } from 'react-redux'
 
 
-class PhoneLogin extends React.Component {
+class CountLogin extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -93,6 +93,26 @@ class PhoneLogin extends React.Component {
 
         loginByCount(params).then ( (res) => {
             console.log(res)
+            if (res.status ==1) {
+                this.alertHandle(res.info)
+                getUserInfo().then (userRes => {
+                    console.log(userRes)
+                    if (userRes.status == 1) {
+                        this.props.dispatch(setUserInfo(userRes))
+                        this.props.dispatch(setCSRF(userRes.csrf_token))
+                        this.props.dispatch(setLogin(true))
+                        console.log(this.props)
+                        //跳转到会员中心
+                        this.props.navigation.navigate('MemberCenterScreen')
+                    } else {
+                        this.alertHandle('获取用户信息失败')
+                    }
+                })
+            } else {
+                this.alertHandle(res.info)
+            }
+        }).catch(err => {
+            this.alertHandleo(err)
         })
 
 
@@ -275,5 +295,5 @@ const styles = StyleSheet.create({
     },
 });
 
-export default connect(() => ({}))(PhoneLogin)
+export default connect(() => ({}))(CountLogin)
  
