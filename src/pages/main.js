@@ -41,6 +41,8 @@ import { setCSRF } from '../redux/actions'
 
 import { connect } from 'react-redux'
 
+import SplashScreen from 'react-native-splash-screen'
+
 const moment = require('moment')
 
 let naviList = [
@@ -149,6 +151,7 @@ class Main extends Component {
                 this.setState({
                     resData: newRes,
                 });
+                SplashScreen.hide()
             }
         });
         // 获取表单token
