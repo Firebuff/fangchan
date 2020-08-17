@@ -22,10 +22,13 @@ import {CheckBox} from 'react-native-elements';
 
 import {getUserInfo, loginByCount} from '../api';
 
-import { setUserInfo, setCSRF, setLogin } from '../redux/actions'
+import {setUserInfo, setCSRF, setLogin} from '../redux/actions';
 
-import { connect } from 'react-redux'
+import {connect} from 'react-redux';
 
+import Spinkiter from 'react-native-spinkit';
+
+import Toast, {DURATION} from 'react-native-easy-toast'
 
 class CountLogin extends React.Component {
     constructor(props) {
@@ -35,6 +38,7 @@ class CountLogin extends React.Component {
             userName: '',
             passWord: '',
             buttonActive: false,
+            loading: false,
         };
     }
     // input事件
@@ -87,36 +91,41 @@ class CountLogin extends React.Component {
         let params = {
             type: 1,
             userName: this.state.userName,
-            passWord: this.state.passWord
-        }
-        console.log(params)
+            passWord: this.state.passWord,
+        };
+        console.log(params);
 
-        loginByCount(params).then ( (res) => {
-            console.log(res)
-            if (res.status ==1) {
-                this.alertHandle(res.info)
-                getUserInfo().then (userRes => {
-                    console.log(userRes)
-                    if (userRes.status == 1) {
-                        this.props.dispatch(setUserInfo(userRes))
-                        this.props.dispatch(setCSRF(userRes.csrf_token))
-                        this.props.dispatch(setLogin(true))
-                        console.log(this.props)
-                        //跳转到会员中心
-                        this.props.navigation.navigate('MemberCenterScreen')
-                    } else {
-                        this.alertHandle('获取用户信息失败')
-                    }
-                })
-            } else {
-                this.alertHandle(res.info)
-            }
-        }).catch(err => {
-            this.alertHandleo(err)
-        })
+        this.setState({loading: true});
 
+        loginByCount(params)
+            .then((res) => {
+                this.setState({loading: false});
+                console.log(res);
+                if (res.status == 1) {
+                    getUserInfo().then((userRes) => {
+                        this.setState({loading: false});
+                        if (userRes.status == 1) {
+                            this.props.dispatch(setUserInfo(userRes));
+                            this.props.dispatch(setCSRF(userRes.csrf_token));
+                            this.props.dispatch(setLogin(true));
+                            console.log(this.props);
+                            //跳转到会员中心
+                            this.props.navigation.navigate(
+                                'MemberCenterScreen',
+                            );
+                        } else {
+                            this.alertHandle('获取用户信息失败');
 
-
+                        }
+                    });
+                } else {
+                    this.alertHandle(res.info);
+                }
+            })
+            .catch((err) => {
+                this.alertHandleo(err);
+                this.setState({loading: false});
+            });
 
         //loginByPhone(params).then((res) => {
         //    //console.log(res)
@@ -138,43 +147,62 @@ class CountLogin extends React.Component {
         //})
     }
 
-    sendMessage() {
-        if (!this.state.phone) {
-            this.alertHandle('手机号码不能为空')
-            return
-        }
-        getMessageType({tpl: 'login'}).then( tplRes => {
-            if (tplRes.status == 1) {
-                let params = {
-                    tel: this.state.phone,
-                    tpl: tplRes.tpl,
-                    id: 'smscode',
-                    checked: 1,
-                };
-                getMessageCode(params).then( (loginRes) => {
-                    if (loginRes.status == 1) {
-                        this.alertHandle(loginRes.info)
-                    } else {
-                        this.alertHandle('获取验证码失败')
-                    }
-                }).catch (err => {
-                    this.alertHandle('获取验证码失败')
-                }) 
-            } else {
-                this.alertHandle('获取验证码失败')
-            }
-        }).catch (err => {
-            this.alertHandle('获取验证码失败')
-        }) 
+    componentDidMount () {
+        
     }
 
-    componentWillUnmount () {
-        clearInterval(this.state.timer)
+
+    sendMessage() {
+        if (!this.state.phone) {
+            this.alertHandle('手机号码不能为空');
+            return;
+        }
+        getMessageType({tpl: 'login'})
+            .then((tplRes) => {
+                if (tplRes.status == 1) {
+                    let params = {
+                        tel: this.state.phone,
+                        tpl: tplRes.tpl,
+                        id: 'smscode',
+                        checked: 1,
+                    };
+                    getMessageCode(params)
+                        .then((loginRes) => {
+                            if (loginRes.status == 1) {
+                                this.alertHandle(loginRes.info);
+                            } else {
+                                this.alertHandle('获取验证码失败');
+                            }
+                        })
+                        .catch((err) => {
+                            this.alertHandle('获取验证码失败');
+                        });
+                } else {
+                    this.alertHandle('获取验证码失败');
+                }
+            })
+            .catch((err) => {
+                this.alertHandle('获取验证码失败');
+            });
+    }
+
+    componentWillUnmount() {
+        clearInterval(this.state.timer);
     }
 
     render() {
         return (
             <View style={styles.wrapper}>
+                {/*<Toast
+                    ref="toast"
+                    style={{backgroundColor:'#000'}}
+                    position='top'
+                    positionValue={200}
+                    fadeInDuration={750}
+                    fadeOutDuration={1000}
+                    opacity={0.8}
+                    textStyle={{color:'#fff'}}
+                />*/}
                 <TextInput
                     style={styles.input}
                     placeholder={'请输入您的账号'}
@@ -200,13 +228,26 @@ class CountLogin extends React.Component {
                                 this.state.buttonActive && this.state.checked
                                     ? '#F04531'
                                     : '#F7A197',
+                            flexDirection: 'row',
+                            justifyContent: 'center',
                         },
                     ]}
                     activeOpacity={0.2}
                     onPress={() => {
                         this.loginHandle();
                     }}>
-                    <Text style={styles.buttonText}>立即登录</Text>
+                    {this.state.loading ? (
+                        <Spinkiter
+                            type={'FadingCircleAlt'}
+                            color={'#fff'}
+                            size={pt(20)}
+                            style={{alignSelf: 'center', marginRight: pt(10)}}
+                        />
+                    ) : null}
+
+                    <Text style={styles.buttonText}>
+                        {this.state.loading ? '正在登录...' : '立即登录'}
+                    </Text>
                 </TouchableOpacity>
 
                 <View
@@ -262,7 +303,7 @@ const styles = StyleSheet.create({
         borderWidth: pt(1),
         paddingLeft: pt(15),
         marginBottom: pt(15),
-        fontSize: pt(14)
+        fontSize: pt(14),
     },
     codeInput: {
         paddingRight: pt(100),
@@ -295,5 +336,4 @@ const styles = StyleSheet.create({
     },
 });
 
-export default connect(() => ({}))(CountLogin)
- 
+export default connect(() => ({}))(CountLogin);

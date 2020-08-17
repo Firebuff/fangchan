@@ -12,8 +12,20 @@ import Svg from '../components/svg';
 class Payment extends React.Component {
     constructor(props) {
         super(props);
-        this.state = {};
+        this.state = {
+           
+        };
     }
+
+    componentDidMount() {
+        
+    }
+
+    paymentHandle = () => {
+        
+        
+      
+    };
 
     render() {
         return (
@@ -48,7 +60,11 @@ class Payment extends React.Component {
                     </View>
                 </View>
                 <View style={styles.btnWrapper}>
-                    <TouchableOpacity style={styles.btn}>
+                    <TouchableOpacity
+                        style={styles.btn}
+                        onPress={() => {
+                            this.paymentHandle();
+                        }}>
                         <Text style={styles.btnText}>确定充值</Text>
                     </TouchableOpacity>
                 </View>
@@ -110,11 +126,11 @@ const styles = StyleSheet.create({
         paddingRight: pt(15),
         marginTop: pt(12),
         height: pt(44),
-        lineHeight: pt(44)
+        lineHeight: pt(44),
     },
     choiceContent: {
         flexDirection: 'row',
-        justifyContent: 'flex-start'
+        justifyContent: 'flex-start',
     },
     choice: {
         flexDirection: 'row',
@@ -124,11 +140,12 @@ const styles = StyleSheet.create({
         lineHeight: pt(44),
         marginRight: pt(10),
         fontSize: pt(14),
-        color: '#333333'
+        color: '#333333',
     },
     choiceItemName: {
-        lineHeight: pt(44)
-    }
+        lineHeight: pt(44),
+    },
+    
 });
 
 export default Payment;
