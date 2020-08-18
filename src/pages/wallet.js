@@ -11,6 +11,7 @@ class Wallet extends React.Component {
         this.state = {};
     }
     render() {
+        console.log(this.props)
         return (
             <View style={styles.wrapper}>
                 <View style={styles.svgWrapper}>
@@ -75,4 +76,4 @@ const styles = StyleSheet.create({
     }
 });
 
-export default Wallet;
+export default  connect (state=> ({globalHouseData: state.globalHouseData})) (Wallet) 

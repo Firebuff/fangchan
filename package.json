@@ -41,6 +41,7 @@
         "react-native-swiper": "^1.6.0",
         "react-native-vector-icons": "^7.0.0",
         "react-native-video": "^4.4.5",
+        "react-native-yunpeng-alipay": "^2.0.0",
         "react-redux": "^7.2.0",
         "redux": "^4.0.5",
         "redux-devtools-extension": "^2.13.8",

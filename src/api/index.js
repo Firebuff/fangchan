@@ -60,3 +60,8 @@ export const getToken = () => {
 export const loginByCount = (params) => {
     return post('admin/webapp/logina', params)
 }
+
+//生成订单
+export const getPaymentOrder = (params) => {
+    return get('admin/webapp/pay', params)
+}
