@@ -12,6 +12,7 @@ class Wallet extends React.Component {
     }
     render() {
         console.log(this.props)
+        let money = this.props.globalHouseData.userInfo.rmb || 0
         return (
             <View style={styles.wrapper}>
                 <View style={styles.svgWrapper}>
@@ -19,7 +20,7 @@ class Wallet extends React.Component {
                 </View>
                 <Text style={styles.name}>我的余额</Text>
                 <Text style={styles.money}>
-                    ￥99,8900.00
+                    ￥{money}
                 </Text>
                 <TouchableOpacity
                     style={styles.btnWrapper}

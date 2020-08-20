@@ -8,24 +8,34 @@ import {
 } from 'react-native';
 import pt from '../utils/px2dp/Px2dp';
 import Svg from '../components/svg';
+import {connect} from 'react-redux';
+import {getPaymentOrder} from '../api';
 
 class Payment extends React.Component {
     constructor(props) {
         super(props);
-        this.state = {
-           
-        };
+        this.state = {};
     }
 
     componentDidMount() {
-        
+        let uid = this.props.globalData.userInfo.uid
+        console.log(this.props);
+        // 获取订单
+        getPaymentOrder({
+            paytype: 'alipay',
+            total_fee: 10,
+            ctype: 'rmb',
+            consume: 4,
+            uid: uid,
+            isapp: 1
+        }).then(data => {
+            console.log(data)
+        }).catch(error => {
+            
+        })
     }
 
-    paymentHandle = () => {
-        
-        
-      
-    };
+    paymentHandle = () => {};
 
     render() {
         return (
@@ -145,7 +155,6 @@ const styles = StyleSheet.create({
     choiceItemName: {
         lineHeight: pt(44),
     },
-    
 });
 
-export default Payment;
+export default  connect (state=> ({globalData: state.globalHouseData})) (Payment)

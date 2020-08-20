@@ -6,12 +6,12 @@ import store from '../redux/store'
 const globalHouseData = store.getState().globalHouseData
 
 
-//const baseUrl = 'https://house.08cms.com/'
-const baseUrl = 'https://www.ruianfang.com/'
+const baseUrl = 'https://house.08cms.com/'
+//const baseUrl = 'https://www.ruianfang.com/'
 
 export const get = (controller, params = {}) => {
     // 参数拼接
-    let requestParams = qs.stringify({...params, _area: '247'})
+    let requestParams = qs.stringify({...params, _area: '247',csrf_token: globalHouseData.CSRF})
 
     let url = `${baseUrl}${controller}?${requestParams}`
 

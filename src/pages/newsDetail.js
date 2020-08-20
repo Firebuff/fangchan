@@ -8,6 +8,13 @@ import HTMLView from 'react-native-htmlview';
 
 import pt from '../utils/px2dp/Px2dp';
 
+import {
+    Placeholder,
+    PlaceholderMedia,
+    PlaceholderLine,
+    Fade,
+} from 'rn-placeholder';
+
 const moment = require('moment');
 
 class NewsDetail extends React.Component {
@@ -33,21 +40,57 @@ class NewsDetail extends React.Component {
             <ScrollView>
                 <View style={styles.wrapper}>
                     {data.name ? (
-                        <Text style={styles.title}>{data.name}</Text>
-                    ) : null}
-                    {
-                        data.create_time? <Text style={styles.date}>
+                        <Text style={styles.title} height="30">{data.name}</Text>
+                    ) : (
+                        <Placeholder Animation={Fade}>
+                            <PlaceholderLine style={styles.title} height={pt(20)} />
+                        </Placeholder>
+                    )}
+                    {data.create_time ? (
+                        <Text style={styles.date}>
                             {moment(data.create_time * 1000).format(
                                 'YYYY.MM.DD',
                             )}
-                        </Text> : null
-                    }
+                        </Text>
+                    ) : (
+                        <Placeholder Animation={Fade}>
+                            <PlaceholderLine style={styles.date} width="30" height={pt(12)} />
+                        </Placeholder>
+                    )}
 
-                    {
-                       data.content? <HTMLView
-                        value={data.content}
-                        stylesheet={styles} /> : null
-                    }
+                    {data.content ? (
+                        <HTMLView value={data.content} stylesheet={styles} />
+                    ) : (
+                        <Placeholder Animation={Fade}>
+                            <PlaceholderLine/>
+                            <PlaceholderLine/>
+                            <PlaceholderLine/>
+                            <PlaceholderLine/>
+                            <PlaceholderLine/>
+                            <PlaceholderLine/>
+                            <PlaceholderLine/>
+                            <PlaceholderLine/>
+                            <PlaceholderLine/>
+                            <PlaceholderLine/>
+                            <PlaceholderLine/>
+                            <PlaceholderLine/>
+                            <PlaceholderLine/>
+                            <PlaceholderLine/>
+                            <PlaceholderLine/>
+                            <PlaceholderLine/>
+                            <PlaceholderLine/>
+                            <PlaceholderLine/>
+                            <PlaceholderLine/>
+                            <PlaceholderLine/>
+                            <PlaceholderLine/>
+                            <PlaceholderLine/>
+                            <PlaceholderLine/>
+                            <PlaceholderLine/>
+                            <PlaceholderLine/>
+                            <PlaceholderLine/>
+                           
+                        </Placeholder>
+                    )}
                 </View>
             </ScrollView>
         );
