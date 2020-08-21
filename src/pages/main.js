@@ -41,8 +41,6 @@ import { setCSRF } from '../redux/actions'
 
 import { connect } from 'react-redux'
 
-import SplashScreen from 'react-native-splash-screen'
-
 const moment = require('moment')
 
 let naviList = [
@@ -140,24 +138,9 @@ class Main extends Component {
     }
 
     componentDidMount() {
-        getIndex().then((res) => {
-            console.log(res);
-            if (res.status == 1) {
-                let newRes = {...res};
-                newRes.appswiper.forEach((item) => {
-                    item.type = 'picture';
-                });
-                //console.log(newRes);
-                this.setState({
-                    resData: newRes,
-                });
-                SplashScreen.hide()
-            }
+        this.setState({
+            resData: this.props.resData,
         });
-        // 获取表单token
-        getToken().then((res) => {
-            this.props.dispatch(setCSRF(res.csrf_token))
-        })
     }
 
     cardSelect(item, index) {
@@ -342,6 +325,7 @@ class Main extends Component {
                                                 <NaviItem
                                                     {...item}
                                                     key={index}
+                                                    navigation = {this.props.navigation}
                                                     width={
                                                         (deviceWidth - pt(60)) /
                                                         5

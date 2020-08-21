@@ -4,7 +4,8 @@ import {getFocusedRouteNameFromRoute} from '@react-navigation/native';
 import pt from '../utils/px2dp/Px2dp';
 
 //tabbar对应的页面
-import MainScreen from './main';
+//import MainScreen from './main';
+import MainScreen from './mainPull';
 import RentScreen from './rent';
 import HouseScreen from './house';
 import HouseDetailScreen from './houseDetail';
@@ -14,11 +15,8 @@ import CountLoginScreen from './countLogin';
 import WalletScreen from './wallet';
 import PaymentScreen from './payment';
 
-
 // 引进tabbar
 import TabbarNavigate from './tabbar';
-
-
 
 // 根据tabbar 的激活状态，动态改变导航标题
 function getHeaderTitle(route) {
@@ -42,20 +40,21 @@ const StackComponent = function () {
             screenOptions={{
                 headerStyle: {
                     backgroundColor: '#f04531',
+                    borderBottomWidth: 0,
+                    elevation: 0,
                 },
                 headerTintColor: '#fff',
 
                 //标题样式
-                headerTitleStyle: { 
+                headerTitleStyle: {
                     fontWeight: 'bold',
                     fontSize: pt(18),
                 },
                 //标题居中
-                headerTitleAlign: 'center', 
+                headerTitleAlign: 'center',
                 //页面左右切换动画
                 ...TransitionPresets.SlideFromRightIOS,
-            }}
-        >
+            }}>
             <Stack.Screen
                 name="首页"
                 component={TabbarNavigate}
@@ -63,55 +62,54 @@ const StackComponent = function () {
                     headerTitle: getHeaderTitle(route),
                 })}
             />
-            <Stack.Screen name="HouseDetailScreen" component={HouseDetailScreen} 
+            <Stack.Screen
+                name="HouseDetailScreen"
+                component={HouseDetailScreen}
                 //设置标题
-                options={
-                    { 
-                        title: '新房详情',
-                    }
-                }
+                options={{
+                    title: '新房详情',
+                }}
             />
-            <Stack.Screen name="NewsDetailScreen" component={NewsDetailScreen} 
+            <Stack.Screen
+                name="NewsDetailScreen"
+                component={NewsDetailScreen}
                 //设置标题
-                options={
-                    { 
-                        title: '资讯详情',
-                    }
-                }
+                options={{
+                    title: '资讯详情',
+                }}
             />
-            <Stack.Screen name="PhoneLoginScreen" component={PhoneLoginScreen} 
+            <Stack.Screen
+                name="PhoneLoginScreen"
+                component={PhoneLoginScreen}
                 //设置标题
-                options={
-                    { 
-                        title: '手机登录',
-                    }
-                }
+                options={{
+                    title: '手机登录',
+                }}
             />
-            <Stack.Screen name="CountLoginScreen" component={CountLoginScreen} 
+            <Stack.Screen
+                name="CountLoginScreen"
+                component={CountLoginScreen}
                 //设置标题
-                options={
-                    { 
-                        title: '账号登录',
-                    }
-                }
+                options={{
+                    title: '账号登录',
+                }}
             />
-            <Stack.Screen name="WalletScreen" component={WalletScreen} 
+            <Stack.Screen
+                name="WalletScreen"
+                component={WalletScreen}
                 //设置标题
-                options={
-                    { 
-                        title: '我的钱包',
-                    }
-                }
+                options={{
+                    title: '我的钱包',
+                }}
             />
-            <Stack.Screen name="PaymentScreen" component={PaymentScreen} 
+            <Stack.Screen
+                name="PaymentScreen"
+                component={PaymentScreen}
                 //设置标题
-                options={
-                    { 
-                        title: '充值余额',
-                    }
-                }
+                options={{
+                    title: '充值余额',
+                }}
             />
-           
         </Stack.Navigator>
     );
 };

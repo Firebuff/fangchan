@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 
-import {View, Text, FlatList, DevSettings} from 'react-native';
+import {View, Text, FlatList, DevSettings, ActivityIndicator,} from 'react-native';
 
 import {getHouseList} from '../api';
 
@@ -161,12 +161,7 @@ class House extends Component {
         } else if (state.isMore) {
             return (
                 <View style={{flexDirection: 'row',justifyContent: 'center'}}>
-                    <Spinkiter
-                        type={'FadingCircleAlt'}
-                        color={'#F04531'}
-                        size={pt(15)}
-                        style={{alignSelf: 'center'}}
-                    />
+                    <ActivityIndicator size="small" color="#919AAA" size={pt(12)}/>
                     <Text style={{fontSize: pt(12),alignSelf: 'center',marginLeft: pt(5),color:'#919AAA'}}>正在加载...</Text>
                 </View>
             );

@@ -6,8 +6,8 @@ import store from '../redux/store'
 const globalHouseData = store.getState().globalHouseData
 
 
-const baseUrl = 'https://house.08cms.com/'
-//const baseUrl = 'https://www.ruianfang.com/'
+//const baseUrl = 'https://house.08cms.com/'
+const baseUrl = 'https://www.ruianfang.com/'
 
 export const get = (controller, params = {}) => {
     // 参数拼接

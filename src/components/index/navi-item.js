@@ -1,19 +1,27 @@
 import React from 'react';
-import {View, Text, StyleSheet } from 'react-native';
+import {View, Text, StyleSheet, TouchableOpacity} from 'react-native';
 
 import pt from '../../utils/px2dp/Px2dp';
 
 import Svg from '../svg';
 
 const NaviItem = function (props) {
-    let { icon, name, bg, width } = props
+    let {icon, name, bg, width} = props;
     return (
-        <View style={[Styles.naviContainer,{ width: width }]}>
+        <View style={[Styles.naviContainer, {width: width}]}>
             <View>
-                <View style={ [Styles.svg, {backgroundColor: bg}] }>
-                    <Svg width={ pt(18) } height={ pt(18) } name={ icon }></Svg>
-                </View>
-                <Text style={ Styles.naviText }>{ name }</Text>
+                <TouchableOpacity
+                    onPress = {
+                        () => {
+                            props.navigation.navigate('MemberCenterScreen')
+                        }
+                    }
+                >
+                    <View style={[Styles.svg, {backgroundColor: bg}]}>
+                        <Svg width={pt(18)} height={pt(18)} name={icon}></Svg>
+                    </View>
+                    <Text style={Styles.naviText}>{name}</Text>
+                </TouchableOpacity>
             </View>
         </View>
     );
@@ -23,7 +31,7 @@ const Styles = StyleSheet.create({
     naviContainer: {
         flexDirection: 'row',
         justifyContent: 'center',
-        paddingBottom: pt(15)
+        paddingBottom: pt(15),
     },
     svg: {
         height: pt(44),
@@ -31,15 +39,14 @@ const Styles = StyleSheet.create({
         borderRadius: 18,
         flexDirection: 'row',
         justifyContent: 'center',
-        alignItems: 'center'
+        alignItems: 'center',
     },
     naviText: {
         color: '#101D37',
         fontSize: pt(12),
         marginTop: pt(13),
         fontWeight: 'bold',
-    }
-})
-
+    },
+});
 
 export default NaviItem;

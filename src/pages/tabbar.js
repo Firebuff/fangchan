@@ -7,7 +7,7 @@ import {TransitionPresets} from '@react-navigation/stack';
 import {Image, Text} from 'react-native';
 
 //tabbar对应的页面
-import MainScreen from './main';
+import MainScreen from './mainPull';
 import MemberCenterScreen from './memberCenter';
 import RentScreen from './rent';
 import HouseScreen from './house';

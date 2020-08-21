@@ -28,7 +28,7 @@ import {connect} from 'react-redux';
 
 import Spinkiter from 'react-native-spinkit';
 
-import Toast, {DURATION} from 'react-native-easy-toast'
+import Toast, {DURATION} from 'react-native-easy-toast';
 
 class CountLogin extends React.Component {
     constructor(props) {
@@ -89,7 +89,6 @@ class CountLogin extends React.Component {
     loginHandle() {
         if (!this.checkHandle()) return;
         let params = {
-            type: 1,
             userName: this.state.userName,
             passWord: this.state.passWord,
         };
@@ -115,7 +114,6 @@ class CountLogin extends React.Component {
                             );
                         } else {
                             this.alertHandle('获取用户信息失败');
-
                         }
                     });
                 } else {
@@ -147,10 +145,7 @@ class CountLogin extends React.Component {
         //})
     }
 
-    componentDidMount () {
-        
-    }
-
+    componentDidMount() {}
 
     sendMessage() {
         if (!this.state.phone) {
@@ -284,6 +279,31 @@ class CountLogin extends React.Component {
                     />
                     <Text style={styles.contract}>《用户访问协议》</Text>
                 </View>
+                <View style={styles.lineField}>
+                    <View style={styles.lineWrapper}>
+                        <Text style={styles.line}></Text>
+                    </View>
+
+                    <Text style={styles.LineText}>更多登录方式</Text>
+                    <View style={styles.lineWrapper}>
+                        <Text style={styles.line}></Text>
+                    </View>
+                </View>
+                <View style={styles.loginField}>
+                    <View style={styles.loginItem}>
+                        <TouchableOpacity
+                            onPress={ () => {
+                                this.props.navigation.navigate('PhoneLoginScreen')
+                            }}
+                        >
+                            <Svg
+                                name="iconbodadianhua"
+                                height={pt(20)}
+                                width={pt(20)}
+                            />
+                        </TouchableOpacity>
+                    </View>
+                </View>
             </View>
         );
     }
@@ -333,6 +353,41 @@ const styles = StyleSheet.create({
         alignSelf: 'center',
         fontSize: pt(12),
         color: '#F04531',
+    },
+    lineWrapper: {
+        flex: 1,
+        height: pt(20),
+        justifyContent: 'center',
+    },
+    line: {
+        borderBottomColor: '#F7A197',
+        borderBottomWidth: pt(1),
+        borderStyle: 'dotted',
+        height: pt(1),
+    },
+    LineText: {
+        lineHeight: pt(20),
+        height: pt(20),
+        fontSize: pt(12),
+        alignItems: 'center',
+        color: '#CCCCCC',
+        paddingLeft: pt(10),
+        paddingRight: pt(10),
+    },
+    lineField: {
+        flexDirection: 'row',
+        justifyContent: 'center',
+        marginTop: pt(50),
+    },
+    loginItem: {
+        alignItems: 'center',
+        backgroundColor: '#F9F9F9',
+        padding: pt(10),
+        borderRadius: pt(30),
+    },
+    loginField: {
+        alignItems: 'center',
+        marginTop: pt(20),
     },
 });
 
