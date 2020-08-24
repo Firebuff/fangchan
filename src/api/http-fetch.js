@@ -1,21 +1,18 @@
-import axios from 'axios'
 import qs from 'qs'
-import store from '../store'
-import { token } from './mUtils'
-
-import { Dialog } from 'vant';
-
 import fetchs from 'cross-fetch';
 
+import store from '../redux/store'
+
+//获取store上面的globalHouseData
+const globalHouseData = store.getState().globalHouseData
 
 
-
-const baseURL = store.state.BASE_URL
+const baseURL = 'https://house.08cms.com/'
 
 
 export const get = (url, params = {}) => {
 
-    let requestParams = qs.stringify({ ...params, _area: store.state.cityId })
+    let requestParams = qs.stringify({ ...params, _area: '247' })
 
     let requestUrl = `${baseURL}${url}?${requestParams}`
 
@@ -46,13 +43,13 @@ export const get = (url, params = {}) => {
 
 export const post = (url, data = {}) => {
 
-    let requestParams = qs.stringify({ _area: store.state.cityId })
+    let requestParams = qs.stringify({ _area: '247' })
 
     let requestUrl = `${baseURL}${url}?${requestParams}`
 
     // 添加token值
     if (!data.csrf_token) {
-        data.csrf_token = store.state.csrf_token
+        data.csrf_token = globalHouseData.CSRF
     }
 
     return fetchs(requestUrl, {
@@ -65,6 +62,7 @@ export const post = (url, data = {}) => {
         },
         credentials: 'include'
     }).then(function(response) {
+        console.log(response)
 
         if (response.status !== 200) {
             return;

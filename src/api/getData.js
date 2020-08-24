@@ -2,10 +2,10 @@
 import {
     get,
     post
-} from '../util/http'
+} from './http-fetch'
 
-import { isObject, inArray } from '../util/mUtils'
-import { getDeviceName } from '../util/nativeApi'
+//import { isObject, inArray } from '../util/mUtils'
+//import { getDeviceName } from '../util/nativeApi'
 
 
 /**

@@ -1,4 +1,5 @@
 import { get, post } from './methods'
+//import { get, post } from './http-fetch'
 
 //新房列表
 export const getHouseList = (params) => {
