@@ -14,6 +14,7 @@ import PhoneLoginScreen from './phoneLogin';
 import CountLoginScreen from './countLogin';
 import WalletScreen from './wallet';
 import PaymentScreen from './payment';
+import ShareScreen from './share';
 
 // 引进tabbar
 import TabbarNavigate from './tabbar';
@@ -108,6 +109,14 @@ const StackComponent = function () {
                 //设置标题
                 options={{
                     title: '充值余额',
+                }}
+            />
+            <Stack.Screen
+                name="ShareScreen"
+                component={ShareScreen}
+                //设置标题
+                options={{
+                    title: '分享',
                 }}
             />
         </Stack.Navigator>

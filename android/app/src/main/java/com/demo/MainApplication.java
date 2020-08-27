@@ -10,6 +10,14 @@ import com.facebook.soloader.SoLoader;
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 
+//友盟引入开始
+import com.umeng.commonsdk.UMConfigure;
+import com.umeng.socialize.PlatformConfig;
+import com.demo.umeng.DplusReactPackage;
+import com.demo.umeng.RNUMConfigure;
+//友盟引入结束
+
+
 public class MainApplication extends Application implements ReactApplication {
 
   private final ReactNativeHost mReactNativeHost =
@@ -25,6 +33,7 @@ public class MainApplication extends Application implements ReactApplication {
           List<ReactPackage> packages = new PackageList(this).getPackages();
           // Packages that cannot be autolinked yet can be added manually here, for example:
           // packages.add(new MyReactNativePackage());
+           packages.add(new DplusReactPackage());
           return packages;
         }
 
@@ -44,7 +53,15 @@ public class MainApplication extends Application implements ReactApplication {
     super.onCreate();
     SoLoader.init(this, /* native exopackage */ false);
     initializeFlipper(this); // Remove this line if you don't want Flipper enabled
+    RNUMConfigure.init(this, "5f44c291113468235fdc7772", "Umeng", UMConfigure.DEVICE_TYPE_PHONE,"");
   }
+
+  {
+    PlatformConfig.setWeixin("wx0bd4f06c99bd83b7", "7f0289f9da02c709ceeb63c9db44342d");
+    PlatformConfig.setSinaWeibo("188430397", "33dcba774c5339010679c4f83b9f0ef0","http://sns.whalecloud.com");
+    PlatformConfig.setQQZone("101050666", "e0bb87c5d14278270d3259779bba8b9c");
+  }
+
 
   /**
    * Loads Flipper in React Native templates.

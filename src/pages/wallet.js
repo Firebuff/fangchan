@@ -1,7 +1,12 @@
 import React from 'react';
-import {View, Text, StyleSheet, TouchableOpacity} from 'react-native';
+import {View, Text, StyleSheet, TouchableOpacity, Alert} from 'react-native';
 import pt from '../utils/px2dp/Px2dp';
 import Svg from '../components/svg';
+
+
+import ShareUtil from '../share/ShareUtil';//导入分享的模块
+
+
 
 import {connect} from 'react-redux';
 
@@ -9,6 +14,10 @@ class Wallet extends React.Component {
     constructor(props) {
         super(props);
         this.state = {};
+    }
+
+    shareHandle () {
+       this.props.navigation.navigate('ShareScreen')
     }
     render() {
         console.log(this.props)
@@ -29,6 +38,15 @@ class Wallet extends React.Component {
                     }}
                 >
                     <Text style={styles.btnText}>充值账户</Text>
+                </TouchableOpacity>
+
+                <TouchableOpacity
+                    style={[styles.btnWrapper,{marginTop: pt(20)}]}
+                    onPress={() => {
+                        this.shareHandle()
+                    }}
+                >
+                    <Text style={styles.btnText}>去分享</Text>
                 </TouchableOpacity>
             </View>
         );
