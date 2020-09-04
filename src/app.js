@@ -9,7 +9,7 @@ import Store from './redux/store';
 import pt from './utils/px2dp/Px2dp';
 
 // stack navigator 组件
-import StackComponent from './pages/index';
+import StackComponent from './router/stack';
 
 const MainComponent = function () {
     return (

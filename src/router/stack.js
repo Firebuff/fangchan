@@ -5,16 +5,16 @@ import pt from '../utils/px2dp/Px2dp';
 
 //tabbar对应的页面
 //import MainScreen from './main';
-import MainScreen from './mainPull';
-import RentScreen from './rent';
-import HouseScreen from './house';
-import HouseDetailScreen from './houseDetail';
-import NewsDetailScreen from './newsDetail';
-import PhoneLoginScreen from './phoneLogin';
-import CountLoginScreen from './countLogin';
-import WalletScreen from './wallet';
-import PaymentScreen from './payment';
-import ShareScreen from './share';
+import MainScreen from '../pages/mainPull';
+import RentScreen from '../pages/rent';
+import HouseScreen from '../pages/house';
+import HouseDetailScreen from '../pages/houseDetail';
+import NewsDetailScreen from '../pages/newsDetail';
+import PhoneLoginScreen from '../pages/phoneLogin';
+import CountLoginScreen from '../pages/countLogin';
+import WalletScreen from '../pages/wallet';
+import PaymentScreen from '../pages/payment';
+import ShareScreen from '../pages/share';
 
 // 引进tabbar
 import TabbarNavigate from './tabbar';
@@ -24,7 +24,8 @@ function getHeaderTitle(route) {
     const routeName = getFocusedRouteNameFromRoute(route) ?? '首页';
     switch (routeName) {
         case '首页':
-            return '首页';
+            //headerShown 隐藏顶部导航栏
+            return ({headerShown:false})
         case '新房':
             return '新房资源';
         case 'MemberCenterScreen':
@@ -59,9 +60,7 @@ const StackComponent = function () {
             <Stack.Screen
                 name="首页"
                 component={TabbarNavigate}
-                options={({route}) => ({
-                    headerTitle: getHeaderTitle(route),
-                })}
+                options={({route}) => (getHeaderTitle(route))}
             />
             <Stack.Screen
                 name="HouseDetailScreen"

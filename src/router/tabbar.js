@@ -7,10 +7,10 @@ import {TransitionPresets} from '@react-navigation/stack';
 import {Image, Text} from 'react-native';
 
 //tabbar对应的页面
-import MainScreen from './mainPull';
-import MemberCenterScreen from './memberCenter';
-import RentScreen from './rent';
-import HouseScreen from './house';
+import MainScreen from '../pages/mainPull';
+import MemberCenterScreen from '../pages/memberCenter';
+import RentScreen from '../pages/rent';
+import HouseScreen from '../pages/house';
 
 const Tabbar = createBottomTabNavigator();
 
@@ -20,13 +20,17 @@ const TabbarNavigate = function () {
             screenOptions={setIcon}
             tabBarOptions={{
                 activeTintColor: 'red',
-            }}
-        >
-            <Tabbar.Screen name="首页" component={MainScreen} />
+            }}>
+            <Tabbar.Screen
+                name="首页"
+                component={MainScreen}
+            />
             <Tabbar.Screen name="新房" component={HouseScreen} />
-            <Tabbar.Screen name="MemberCenterScreen" component={MemberCenterScreen} 
+            <Tabbar.Screen
+                name="MemberCenterScreen"
+                component={MemberCenterScreen}
                 options={{
-                    title: '我的'
+                    title: '我的',
                 }}
             />
         </Tabbar.Navigator>

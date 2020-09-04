@@ -186,6 +186,7 @@ class CountLogin extends React.Component {
     }
 
     render() {
+        console.log(global)
         return (
             <View style={styles.wrapper}>
                 {/*<Toast

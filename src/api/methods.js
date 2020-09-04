@@ -2,8 +2,8 @@ import qs from 'qs';
 
 import store from '../redux/store';
 
-//const baseUrl = 'https://house.08cms.com/'
-const baseUrl = 'https://www.ruianfang.com/';
+const baseUrl = 'https://house.08cms.com/'
+//const baseUrl = 'https://www.ruianfang.com/';
 
 export const get = (controller, params = {}) => {
     //获取store上面的globalHouseData
