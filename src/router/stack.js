@@ -15,6 +15,7 @@ import CountLoginScreen from '../pages/countLogin';
 import WalletScreen from '../pages/wallet';
 import PaymentScreen from '../pages/payment';
 import ShareScreen from '../pages/share';
+import CodePushScreen from '../pages/codePush';
 
 // 引进tabbar
 import TabbarNavigate from './tabbar';
@@ -116,6 +117,14 @@ const StackComponent = function () {
                 //设置标题
                 options={{
                     title: '分享',
+                }}
+            />
+            <Stack.Screen
+                name="CodePushScreen"
+                component={CodePushScreen}
+                //设置标题
+                options={{
+                    title: 'codePush',
                 }}
             />
         </Stack.Navigator>

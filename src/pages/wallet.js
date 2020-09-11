@@ -48,6 +48,15 @@ class Wallet extends React.Component {
                 >
                     <Text style={styles.btnText}>去分享</Text>
                 </TouchableOpacity>
+
+                <TouchableOpacity
+                    style={[styles.btnWrapper,{marginTop: pt(20)}]}
+                    onPress={() => {
+                        this.props.navigation.navigate('CodePushScreen')
+                    }}
+                >
+                    <Text style={styles.btnText}>检查更新</Text>
+                </TouchableOpacity>
             </View>
         );
     }

@@ -17,6 +17,9 @@ import com.demo.umeng.DplusReactPackage;
 import com.demo.umeng.RNUMConfigure;
 //友盟引入结束
 
+// Import the plugin class.
+import com.microsoft.codepush.react.CodePush;
+
 
 public class MainApplication extends Application implements ReactApplication {
 
@@ -25,6 +28,11 @@ public class MainApplication extends Application implements ReactApplication {
         @Override
         public boolean getUseDeveloperSupport() {
           return BuildConfig.DEBUG;
+        }
+        //code push
+        @Override
+        protected String getJSBundleFile() {
+          return CodePush.getJSBundleFile();
         }
 
         @Override
